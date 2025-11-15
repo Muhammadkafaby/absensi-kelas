@@ -68,12 +68,14 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
         $routes->post('store', 'AttendanceController::store', ['filter' => 'role:guru']);
         $routes->get('edit/(:num)', 'AttendanceController::edit/$1');
         $routes->post('update/(:num)', 'AttendanceController::update/$1');
+        $routes->post('delete/(:num)', 'AttendanceController::delete/$1', ['filter' => 'role:guru']);
 
         // Admin routes
         $routes->get('admin', 'AttendanceController::adminIndex', ['filter' => 'role:admin']);
         $routes->post('admin/store', 'AttendanceController::adminStore', ['filter' => 'role:admin']);
         $routes->get('admin/edit/(:num)', 'AttendanceController::adminEdit/$1', ['filter' => 'role:admin']);
         $routes->post('admin/update/(:num)', 'AttendanceController::adminUpdate/$1', ['filter' => 'role:admin']);
+        $routes->post('admin/delete/(:num)', 'AttendanceController::adminDelete/$1', ['filter' => 'role:admin']);
     });
 
     // ==================== MASTER DATA ROUTES (Admin only) ====================
