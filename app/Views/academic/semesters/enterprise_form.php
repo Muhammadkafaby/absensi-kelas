@@ -21,6 +21,18 @@
 <div class="enterprise-card" style="max-width: 800px;">
     <form action="<?= isset($semester) ? base_url('/academic/semesters/update/' . $semester['id']) : base_url('/academic/semesters/store') ?>" method="POST">
         <?= csrf_field() ?>
+
+        <?php if (session()->has('errors')): ?>
+            <div class="enterprise-alert alert-error mb-4">
+                <div style="font-weight: 600; margin-bottom: 0.5rem;">⚠️ Terdapat kesalahan:</div>
+                <ul style="margin: 0; padding-left: 1.5rem;">
+                    <?php foreach (session('errors') as $error): ?>
+                        <li><?= esc($error) ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        <?php endif; ?>
+
         <div style="display: flex; flex-direction: column; gap: 1.5rem;">
             <div class="form-row">
                 <div class="enterprise-form-group">
