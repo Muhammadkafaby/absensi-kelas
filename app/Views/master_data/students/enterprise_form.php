@@ -38,14 +38,23 @@
                            required autofocus>
                 </div>
 
-                <!-- Nama -->
+                <!-- NISN -->
                 <div class="enterprise-form-group">
-                    <label for="name" class="enterprise-label enterprise-label-required">Nama Lengkap</label>
-                    <input type="text" id="name" name="name" class="enterprise-input"
-                           value="<?= old('name', $student['name'] ?? '') ?>"
-                           placeholder="Nama lengkap siswa"
-                           required>
+                    <label for="nisn" class="enterprise-label">NISN</label>
+                    <input type="text" id="nisn" name="nisn" class="enterprise-input"
+                           value="<?= old('nisn', $student['nisn'] ?? '') ?>"
+                           placeholder="Nomor Induk Siswa Nasional">
+                    <p class="form-helper-text">Opsional</p>
                 </div>
+            </div>
+
+            <!-- Nama Lengkap -->
+            <div class="enterprise-form-group">
+                <label for="name" class="enterprise-label enterprise-label-required">Nama Lengkap</label>
+                <input type="text" id="name" name="name" class="enterprise-input"
+                       value="<?= old('name', $student['name'] ?? '') ?>"
+                       placeholder="Nama lengkap siswa"
+                       required>
             </div>
 
             <div class="form-row">
@@ -64,14 +73,25 @@
                     </select>
                 </div>
 
-                <!-- Status -->
+                <!-- Jenis Kelamin -->
                 <div class="enterprise-form-group">
-                    <label for="status" class="enterprise-label enterprise-label-required">Status</label>
-                    <select id="status" name="status" class="enterprise-select" required>
-                        <option value="active" <?= old('status', $student['status'] ?? 'active') == 'active' ? 'selected' : '' ?>>Aktif</option>
-                        <option value="inactive" <?= old('status', $student['status'] ?? '') == 'inactive' ? 'selected' : '' ?>>Tidak Aktif</option>
+                    <label for="gender" class="enterprise-label enterprise-label-required">Jenis Kelamin</label>
+                    <select id="gender" name="gender" class="enterprise-select" required>
+                        <option value="">Pilih Jenis Kelamin</option>
+                        <option value="L" <?= old('gender', $student['gender'] ?? '') == 'L' ? 'selected' : '' ?>>Laki-laki</option>
+                        <option value="P" <?= old('gender', $student['gender'] ?? '') == 'P' ? 'selected' : '' ?>>Perempuan</option>
                     </select>
                 </div>
+            </div>
+
+            <!-- Status -->
+            <div class="enterprise-form-group">
+                <label for="status" class="enterprise-label enterprise-label-required">Status</label>
+                <select id="status" name="status" class="enterprise-select" required>
+                    <option value="active" <?= old('status', $student['status'] ?? 'active') == 'active' ? 'selected' : '' ?>>Aktif</option>
+                    <option value="inactive" <?= old('status', $student['status'] ?? '') == 'inactive' ? 'selected' : '' ?>>Tidak Aktif</option>
+                </select>
+                <p class="form-helper-text">Siswa aktif akan muncul di daftar absensi</p>
             </div>
 
             <!-- Buttons -->

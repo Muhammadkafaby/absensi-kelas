@@ -25,19 +25,29 @@
     <form action="<?= isset($teacher) ? base_url('/master/teachers/update/' . $teacher['id']) : base_url('/master/teachers/store') ?>" method="POST">
         <?= csrf_field() ?>
         <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+            <!-- Nama Lengkap -->
+            <div class="enterprise-form-group">
+                <label for="name" class="enterprise-label enterprise-label-required">Nama Lengkap</label>
+                <input type="text" id="name" name="name" class="enterprise-input"
+                       value="<?= old('name', $teacher['name'] ?? '') ?>"
+                       placeholder="Nama lengkap guru"
+                       required autofocus>
+            </div>
+
             <div class="form-row">
                 <div class="enterprise-form-group">
                     <label for="nip" class="enterprise-label">NIP</label>
                     <input type="text" id="nip" name="nip" class="enterprise-input"
                            value="<?= old('nip', $teacher['nip'] ?? '') ?>"
                            placeholder="Nomor Induk Pegawai">
+                    <p class="form-helper-text">Opsional</p>
                 </div>
                 <div class="enterprise-form-group">
-                    <label for="name" class="enterprise-label enterprise-label-required">Nama Lengkap</label>
-                    <input type="text" id="name" name="name" class="enterprise-input"
-                           value="<?= old('name', $teacher['name'] ?? '') ?>"
-                           placeholder="Nama lengkap guru"
-                           required autofocus>
+                    <label for="phone" class="enterprise-label">No. Telepon</label>
+                    <input type="tel" id="phone" name="phone" class="enterprise-input"
+                           value="<?= old('phone', $teacher['phone'] ?? '') ?>"
+                           placeholder="08xx xxxx xxxx">
+                    <p class="form-helper-text">Opsional</p>
                 </div>
             </div>
             <div style="display: flex; gap: 1rem; justify-content: flex-end; padding-top: 1.5rem; border-top: 1px solid var(--enterprise-border);">
