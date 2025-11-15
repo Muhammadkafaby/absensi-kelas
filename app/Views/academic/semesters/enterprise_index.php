@@ -115,7 +115,7 @@
                             </td>
                             <td>
                                 <span class="enterprise-badge badge-info">
-                                    Semester <?= $semester['semester'] ?>
+                                    <?= esc($semester['name']) ?>
                                 </span>
                             </td>
                             <td><?= date('d M Y', strtotime($semester['start_date'])) ?></td>
@@ -136,7 +136,7 @@
                                         <span>✏️</span>
                                         <span>Edit</span>
                                     </a>
-                                    <button onclick="deleteSemester(<?= $semester['id'] ?>, '<?= esc($semester['year_name']) ?> - Semester <?= $semester['semester'] ?>')" class="btn-enterprise btn-ghost btn-sm" style="color: var(--enterprise-error-600);">
+                                    <button onclick="deleteSemester(<?= $semester['id'] ?>, '<?= esc($semester['year_name']) ?> - <?= esc($semester['name']) ?>')" class="btn-enterprise btn-ghost btn-sm" style="color: var(--enterprise-error-600);">
                                         <span>🗑️</span>
                                     </button>
                                 </div>

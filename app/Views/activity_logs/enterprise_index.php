@@ -84,7 +84,14 @@
                                     <?= strtoupper($log['role']) ?>
                                 </span>
                             </td>
-                            <td><?= esc($log['activity']) ?></td>
+                            <td>
+                                <div style="font-size: 0.875rem;">
+                                    <div style="font-weight: 600; color: var(--enterprise-text-primary);"><?= esc($log['action']) ?></div>
+                                    <?php if (!empty($log['description'])): ?>
+                                        <div style="color: var(--enterprise-text-tertiary); font-size: 0.75rem; margin-top: 0.25rem;"><?= esc($log['description']) ?></div>
+                                    <?php endif; ?>
+                                </div>
+                            </td>
                             <td style="font-family: monospace; font-size: 0.875rem;"><?= esc($log['ip_address']) ?></td>
                         </tr>
                     <?php endforeach; ?>
