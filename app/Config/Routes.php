@@ -65,6 +65,8 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
         $routes->get('/', 'AttendanceController::index');
         $routes->get('get-students/(:num)', 'AttendanceController::getStudentsByClass/$1');
         $routes->post('store', 'AttendanceController::store');
+        $routes->get('edit/(:num)', 'AttendanceController::edit/$1');
+        $routes->post('update/(:num)', 'AttendanceController::update/$1');
     });
 
     // ==================== MASTER DATA ROUTES (Admin only) ====================
