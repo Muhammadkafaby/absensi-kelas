@@ -60,13 +60,20 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
         $routes->get('semesters/set-active/(:num)', 'SemesterController::setActive/$1');
     });
 
-    // ==================== ATTENDANCE ROUTES (Guru only) ====================
-    $routes->group('attendance', ['filter' => 'role:guru'], function ($routes) {
-        $routes->get('/', 'AttendanceController::index');
+    // ==================== ATTENDANCE ROUTES ====================
+    $routes->group('attendance', ['filter' => 'auth'], function ($routes) {
+        // Guru routes
+        $routes->get('/', 'AttendanceController::index', ['filter' => 'role:guru']);
         $routes->get('get-students/(:num)', 'AttendanceController::getStudentsByClass/$1');
-        $routes->post('store', 'AttendanceController::store');
+        $routes->post('store', 'AttendanceController::store', ['filter' => 'role:guru']);
         $routes->get('edit/(:num)', 'AttendanceController::edit/$1');
         $routes->post('update/(:num)', 'AttendanceController::update/$1');
+
+        // Admin routes
+        $routes->get('admin', 'AttendanceController::adminIndex', ['filter' => 'role:admin']);
+        $routes->post('admin/store', 'AttendanceController::adminStore', ['filter' => 'role:admin']);
+        $routes->get('admin/edit/(:num)', 'AttendanceController::adminEdit/$1', ['filter' => 'role:admin']);
+        $routes->post('admin/update/(:num)', 'AttendanceController::adminUpdate/$1', ['filter' => 'role:admin']);
     });
 
     // ==================== MASTER DATA ROUTES (Admin only) ====================

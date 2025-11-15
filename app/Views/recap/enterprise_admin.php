@@ -12,10 +12,16 @@
             <h1 style="font-size: 1.875rem; font-weight: 700; margin-bottom: 0.5rem;">Rekap Absensi</h1>
             <p style="color: var(--enterprise-text-secondary); margin: 0;">Laporan dan rekap kehadiran siswa secara keseluruhan</p>
         </div>
-        <button onclick="exportExcel()" class="btn-enterprise btn-primary">
-            <span>📥</span>
-            <span>Export Excel</span>
-        </button>
+        <div style="display: flex; gap: 0.75rem;">
+            <a href="<?= base_url('/attendance/admin') ?>" class="btn-enterprise btn-secondary">
+                <span>➕</span>
+                <span>Input Absensi</span>
+            </a>
+            <button onclick="exportExcel()" class="btn-enterprise btn-primary">
+                <span>📥</span>
+                <span>Export Excel</span>
+            </button>
+        </div>
     </div>
 </div>
 
@@ -25,39 +31,43 @@
         <h2 class="card-title">Filter Laporan</h2>
     </div>
 
-    <form method="GET" class="form-row">
-        <div class="enterprise-form-group">
-            <label class="enterprise-label">Periode</label>
-            <select name="period" class="enterprise-select" onchange="this.form.submit()">
-                <option value="today" <?= ($period ?? 'today') == 'today' ? 'selected' : '' ?>>Hari Ini</option>
-                <option value="week" <?= ($period ?? '') == 'week' ? 'selected' : '' ?>>Minggu Ini</option>
-                <option value="month" <?= ($period ?? '') == 'month' ? 'selected' : '' ?>>Bulan Ini</option>
-                <option value="custom" <?= ($period ?? '') == 'custom' ? 'selected' : '' ?>>Custom</option>
-            </select>
-        </div>
-
-        <div class="enterprise-form-group">
-            <label class="enterprise-label">Dari Tanggal</label>
-            <input type="date" name="start_date" value="<?= $start_date ?? date('Y-m-d') ?>" class="enterprise-input">
-        </div>
-
-        <div class="enterprise-form-group">
-            <label class="enterprise-label">Sampai Tanggal</label>
-            <input type="date" name="end_date" value="<?= $end_date ?? date('Y-m-d') ?>" class="enterprise-input">
-        </div>
-
+    <form method="GET" id="filterForm" class="form-row">
         <div class="enterprise-form-group">
             <label class="enterprise-label">Kelas</label>
-            <select name="class_id" class="enterprise-select">
+            <select name="class_id" class="enterprise-select" onchange="this.form.submit()">
                 <option value="">Semua Kelas</option>
                 <?php if (!empty($classes)): ?>
                     <?php foreach ($classes as $class): ?>
-                        <option value="<?= $class['id'] ?>" <?= ($class_id ?? '') == $class['id'] ? 'selected' : '' ?>>
+                        <option value="<?= $class['id'] ?>" <?= ($filters['class_id'] ?? '') == $class['id'] ? 'selected' : '' ?>>
                             <?= esc($class['name']) ?>
                         </option>
                     <?php endforeach; ?>
                 <?php endif; ?>
             </select>
+        </div>
+
+        <div class="enterprise-form-group">
+            <label class="enterprise-label">Mata Pelajaran</label>
+            <select name="subject_id" class="enterprise-select" onchange="this.form.submit()">
+                <option value="">Semua Mapel</option>
+                <?php if (!empty($subjects)): ?>
+                    <?php foreach ($subjects as $subject): ?>
+                        <option value="<?= $subject['id'] ?>" <?= ($filters['subject_id'] ?? '') == $subject['id'] ? 'selected' : '' ?>>
+                            <?= esc($subject['name']) ?>
+                        </option>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </select>
+        </div>
+
+        <div class="enterprise-form-group">
+            <label class="enterprise-label">Dari Tanggal</label>
+            <input type="date" name="date_from" value="<?= $filters['date_from'] ?? date('Y-m-01') ?>" class="enterprise-input">
+        </div>
+
+        <div class="enterprise-form-group">
+            <label class="enterprise-label">Sampai Tanggal</label>
+            <input type="date" name="date_to" value="<?= $filters['date_to'] ?? date('Y-m-d') ?>" class="enterprise-input">
         </div>
 
         <div class="enterprise-form-group" style="display: flex; align-items: flex-end;">
@@ -99,71 +109,106 @@
     </div>
 </div>
 
-<!-- Data Table -->
+<!-- Sessions Table -->
+<?php
+// Group records by session_id
+$sessions = [];
+foreach ($records ?? [] as $record) {
+    $sessionId = $record['session_id'] ?? $record['attendance_session_id'];
+    if (!isset($sessions[$sessionId])) {
+        $sessions[$sessionId] = [
+            'id' => $sessionId,
+            'date' => $record['date'],
+            'class_name' => $record['class_name'],
+            'subject_name' => $record['subject_name'],
+            'teacher_name' => $record['teacher_name'],
+            'lesson_hour' => $record['lesson_hour'] ?? '-',
+            'count' => 0
+        ];
+    }
+    $sessions[$sessionId]['count']++;
+}
+?>
+
 <div class="enterprise-card">
     <div class="card-header">
-        <h2 class="card-title">Detail Rekap Absensi</h2>
-        <span class="enterprise-badge badge-neutral">
-            <?= count($records ?? []) ?> Records
-        </span>
+        <h2 class="card-title">Sesi Absensi</h2>
+        <span class="enterprise-badge badge-neutral"><?= count($sessions) ?> Sesi</span>
     </div>
 
     <div class="enterprise-table-wrapper" style="border: none; background: transparent;">
         <div class="table-toolbar">
             <div class="table-search">
                 <span class="table-search-icon">🔍</span>
-                <input type="text" class="table-search-input" placeholder="Cari siswa, kelas, atau guru...">
+                <input type="text" id="sessionSearch" class="table-search-input" placeholder="Cari sesi...">
             </div>
         </div>
 
-        <table class="enterprise-table">
+        <table class="enterprise-table" id="sessionsTable">
             <thead>
                 <tr>
-                    <th>No</th>
+                    <th style="width: 60px;">No</th>
                     <th>Tanggal</th>
-                    <th>NIS</th>
-                    <th>Nama Siswa</th>
                     <th>Kelas</th>
-                    <th>Mapel</th>
+                    <th>Mata Pelajaran</th>
                     <th>Guru</th>
-                    <th>Status</th>
-                    <th>Catatan</th>
+                    <th style="width: 100px;">Jam Ke</th>
+                    <th style="width: 120px;">Jumlah Siswa</th>
+                    <th style="width: 150px;">Aksi</th>
                 </tr>
             </thead>
             <tbody>
-                <?php if (!empty($records)): ?>
-                    <?php foreach ($records as $index => $record): ?>
+                <?php if (!empty($sessions)): ?>
+                    <?php $no = 1; ?>
+                    <?php foreach ($sessions as $session): ?>
                         <tr>
-                            <td><?= $index + 1 ?></td>
-                            <td><?= date('d M Y', strtotime($record['date'])) ?></td>
-                            <td><strong><?= esc($record['nis']) ?></strong></td>
-                            <td><?= esc($record['student_name']) ?></td>
-                            <td><span class="enterprise-badge badge-info"><?= esc($record['class_name']) ?></span></td>
-                            <td><?= esc($record['subject_name']) ?></td>
-                            <td><?= esc($record['teacher_name']) ?></td>
+                            <td><strong><?= $no++ ?></strong></td>
                             <td>
-                                <?php
-                                $statusMap = [
-                                    'H' => ['✓ Hadir', 'badge-success'],
-                                    'I' => ['📋 Izin', 'badge-info'],
-                                    'S' => ['🏥 Sakit', 'badge-warning'],
-                                    'A' => ['❌ Alpa', 'badge-error'],
-                                    'T' => ['⏰ Terlambat', 'badge-warning']
-                                ];
-                                $status = $statusMap[$record['status']] ?? ['?', 'badge-neutral'];
-                                ?>
-                                <span class="enterprise-badge <?= $status[1] ?>"><?= $status[0] ?></span>
+                                <div style="display: flex; flex-direction: column;">
+                                    <span style="font-weight: 600;">
+                                        <?= date('d M Y', strtotime($session['date'])) ?>
+                                    </span>
+                                    <span style="font-size: 0.75rem; color: var(--enterprise-text-tertiary);">
+                                        <?= date('l', strtotime($session['date'])) ?>
+                                    </span>
+                                </div>
                             </td>
-                            <td><?= esc($record['note'] ?? '-') ?></td>
+                            <td>
+                                <span class="enterprise-badge badge-info">
+                                    <?= esc($session['class_name']) ?>
+                                </span>
+                            </td>
+                            <td><?= esc($session['subject_name']) ?></td>
+                            <td><?= esc($session['teacher_name']) ?></td>
+                            <td>
+                                <span class="enterprise-badge badge-neutral">
+                                    Jam <?= esc($session['lesson_hour']) ?>
+                                </span>
+                            </td>
+                            <td>
+                                <span class="enterprise-badge badge-success">
+                                    <?= $session['count'] ?> siswa
+                                </span>
+                            </td>
+                            <td>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <a href="<?= base_url('/attendance/admin/edit/' . $session['id']) ?>"
+                                       class="btn-enterprise btn-secondary btn-sm"
+                                       title="Edit Absensi">
+                                        <span>✏️</span>
+                                        <span>Edit</span>
+                                    </a>
+                                </div>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                 <?php else: ?>
                     <tr>
-                        <td colspan="9" class="text-center" style="padding: 3rem;">
+                        <td colspan="8" class="text-center" style="padding: 3rem;">
                             <div class="empty-state" style="padding: 1rem;">
                                 <div class="empty-state-icon">📊</div>
                                 <h3 class="empty-state-title">Tidak Ada Data</h3>
-                                <p class="empty-state-message">Belum ada data absensi untuk periode ini</p>
+                                <p class="empty-state-message">Belum ada sesi absensi untuk filter ini</p>
                             </div>
                         </td>
                     </tr>
@@ -198,5 +243,14 @@ function exportExcel() {
 
     if (window.Toast) Toast.success('Mengunduh file Excel...');
 }
+
+// Session search functionality
+document.getElementById('sessionSearch').addEventListener('input', function() {
+    const query = this.value.toLowerCase();
+    document.querySelectorAll('#sessionsTable tbody tr').forEach(row => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(query) ? '' : 'none';
+    });
+});
 </script>
 <?= $this->endSection() ?>
