@@ -663,4 +663,107 @@ class AttendanceController extends BaseController
         session()->setFlashdata('success', 'Data absensi berhasil diupdate');
         return redirect()->to('/recap/admin');
     }
+
+    /**
+     * Delete attendance (Teacher)
+     */
+    public function delete($sessionId)
+    {
+        // Hanya guru yang bisa akses
+        if (session()->get('role') !== 'guru') {
+            session()->setFlashdata('error', 'Akses ditolak');
+            return redirect()->to('/dashboard');
+        }
+
+        $teacherId = session()->get('teacher_id');
+        $sessionModel = new AttendanceSessionModel();
+        $recordModel = new AttendanceRecordModel();
+
+        // Get session data
+        $session = $sessionModel->find($sessionId);
+
+        if (!$session) {
+            session()->setFlashdata('error', 'Data absensi tidak ditemukan');
+            return redirect()->to('/recap/teacher');
+        }
+
+        // Pastikan session ini milik guru yang login
+        if ($session['teacher_id'] != $teacherId) {
+            session()->setFlashdata('error', 'Anda tidak memiliki akses untuk menghapus absensi ini');
+            return redirect()->to('/recap/teacher');
+        }
+
+        // Start transaction
+        $db = \Config\Database::connect();
+        $db->transStart();
+
+        // Delete attendance records first (foreign key constraint)
+        $recordModel->where('attendance_session_id', $sessionId)->delete();
+
+        // Delete session
+        if (!$sessionModel->delete($sessionId)) {
+            $db->transRollback();
+            session()->setFlashdata('error', 'Gagal menghapus data absensi');
+            return redirect()->to('/recap/teacher');
+        }
+
+        // Complete transaction
+        $db->transComplete();
+
+        if ($db->transStatus() === false) {
+            session()->setFlashdata('error', 'Terjadi kesalahan saat menghapus data');
+            return redirect()->to('/recap/teacher');
+        }
+
+        session()->setFlashdata('success', 'Data absensi berhasil dihapus');
+        return redirect()->to('/recap/teacher');
+    }
+
+    /**
+     * Delete attendance (Admin)
+     */
+    public function adminDelete($sessionId)
+    {
+        // Hanya admin yang bisa akses
+        if (session()->get('role') !== 'admin') {
+            session()->setFlashdata('error', 'Akses ditolak');
+            return redirect()->to('/dashboard');
+        }
+
+        $sessionModel = new AttendanceSessionModel();
+        $recordModel = new AttendanceRecordModel();
+
+        // Get session data
+        $session = $sessionModel->find($sessionId);
+
+        if (!$session) {
+            session()->setFlashdata('error', 'Data absensi tidak ditemukan');
+            return redirect()->to('/recap/admin');
+        }
+
+        // Start transaction
+        $db = \Config\Database::connect();
+        $db->transStart();
+
+        // Delete attendance records first (foreign key constraint)
+        $recordModel->where('attendance_session_id', $sessionId)->delete();
+
+        // Delete session
+        if (!$sessionModel->delete($sessionId)) {
+            $db->transRollback();
+            session()->setFlashdata('error', 'Gagal menghapus data absensi');
+            return redirect()->to('/recap/admin');
+        }
+
+        // Complete transaction
+        $db->transComplete();
+
+        if ($db->transStatus() === false) {
+            session()->setFlashdata('error', 'Terjadi kesalahan saat menghapus data');
+            return redirect()->to('/recap/admin');
+        }
+
+        session()->setFlashdata('success', 'Data absensi berhasil dihapus');
+        return redirect()->to('/recap/admin');
+    }
 }

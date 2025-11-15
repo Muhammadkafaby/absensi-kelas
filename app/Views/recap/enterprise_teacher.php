@@ -188,6 +188,12 @@ foreach ($records ?? [] as $record) {
                                         <span>✏️</span>
                                         <span>Edit</span>
                                     </a>
+                                    <button onclick="confirmDelete(<?= $session['id'] ?>, '<?= esc($session['date']) ?>', '<?= esc($session['class_name']) ?>', '<?= esc($session['subject_name']) ?>')"
+                                            class="btn-enterprise btn-danger btn-sm"
+                                            title="Hapus Absensi">
+                                        <span>🗑️</span>
+                                        <span>Hapus</span>
+                                    </button>
                                 </div>
                             </td>
                         </tr>
@@ -238,5 +244,37 @@ document.getElementById('sessionSearch').addEventListener('input', function() {
         row.style.display = text.includes(query) ? '' : 'none';
     });
 });
+
+// Confirm delete with detailed info
+function confirmDelete(sessionId, date, className, subjectName) {
+    const formattedDate = new Date(date).toLocaleDateString('id-ID', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+    });
+
+    const message = `Apakah Anda yakin ingin menghapus data absensi ini?\n\n` +
+                   `📅 Tanggal: ${formattedDate}\n` +
+                   `📚 Kelas: ${className}\n` +
+                   `📖 Mata Pelajaran: ${subjectName}\n\n` +
+                   `Data yang dihapus tidak dapat dikembalikan!`;
+
+    if (confirm(message)) {
+        // Create form and submit
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '<?= base_url('/attendance/delete/') ?>' + sessionId;
+
+        // Add CSRF token
+        const csrfInput = document.createElement('input');
+        csrfInput.type = 'hidden';
+        csrfInput.name = '<?= csrf_token() ?>';
+        csrfInput.value = '<?= csrf_hash() ?>';
+        form.appendChild(csrfInput);
+
+        document.body.appendChild(form);
+        form.submit();
+    }
+}
 </script>
 <?= $this->endSection() ?>
