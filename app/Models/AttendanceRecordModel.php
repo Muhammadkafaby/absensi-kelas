@@ -88,6 +88,11 @@ class AttendanceRecordModel extends Model
             $builder->where('attendance_sessions.subject_id', $filters['subject_id']);
         }
 
+        // Filter by teacher
+        if (isset($filters['teacher_id'])) {
+            $builder->where('attendance_sessions.teacher_id', $filters['teacher_id']);
+        }
+
         // Filter by date range
         if (isset($filters['date_from'])) {
             $builder->where('attendance_sessions.date >=', $filters['date_from']);
@@ -111,6 +116,7 @@ class AttendanceRecordModel extends Model
     {
         $builder = $this->db->table('attendance_records')
                             ->select('attendance_records.*,
+                                     attendance_records.attendance_session_id as session_id,
                                      students.nis,
                                      students.name as student_name,
                                      classes.name as class_name,
@@ -132,6 +138,10 @@ class AttendanceRecordModel extends Model
 
         if (isset($filters['subject_id'])) {
             $builder->where('attendance_sessions.subject_id', $filters['subject_id']);
+        }
+
+        if (isset($filters['teacher_id'])) {
+            $builder->where('attendance_sessions.teacher_id', $filters['teacher_id']);
         }
 
         if (isset($filters['date_from'])) {

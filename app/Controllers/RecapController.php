@@ -116,10 +116,10 @@ class RecapController extends BaseController
             $filters['date_to'] = $dateTo;
         }
 
-        // Get sessions dan recap data
-        $sessions = $sessionModel->getSessionsWithRelations($filters);
+        // Get attendance records with full details
+        $records = $recordModel->getRecordsWithDetails($filters);
 
-        // Get recap data jika ada filter
+        // Get recap data (summary per student)
         $recapData = [];
         if (count($filters) > 1) { // Lebih dari 1 karena teacher_id selalu ada
             $recapData = $recordModel->getRecapByStudent($filters);
@@ -129,7 +129,7 @@ class RecapController extends BaseController
             'title'       => 'Rekap Absensi Guru',
             'classes'     => $classModel->findAll(),
             'subjects'    => $subjectModel->getSubjectsByTeacher($teacherId),
-            'sessions'    => $sessions,
+            'records'     => $records,
             'recap_data'  => $recapData,
             'filters'     => $filters,
         ];

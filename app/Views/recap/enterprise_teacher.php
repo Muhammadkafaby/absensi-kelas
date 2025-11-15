@@ -34,7 +34,7 @@
                 <option value="">Semua Mapel</option>
                 <?php if (!empty($subjects)): ?>
                     <?php foreach ($subjects as $subject): ?>
-                        <option value="<?= $subject['id'] ?>" <?= ($filter_subject_id ?? '') == $subject['id'] ? 'selected' : '' ?>>
+                        <option value="<?= $subject['id'] ?>" <?= ($filters['subject_id'] ?? '') == $subject['id'] ? 'selected' : '' ?>>
                             <?= esc($subject['name']) ?>
                         </option>
                     <?php endforeach; ?>
@@ -48,7 +48,7 @@
                 <option value="">Semua Kelas</option>
                 <?php if (!empty($classes)): ?>
                     <?php foreach ($classes as $class): ?>
-                        <option value="<?= $class['id'] ?>" <?= ($filter_class_id ?? '') == $class['id'] ? 'selected' : '' ?>>
+                        <option value="<?= $class['id'] ?>" <?= ($filters['class_id'] ?? '') == $class['id'] ? 'selected' : '' ?>>
                             <?= esc($class['name']) ?>
                         </option>
                     <?php endforeach; ?>
@@ -58,12 +58,12 @@
 
         <div class="enterprise-form-group">
             <label class="enterprise-label">Dari Tanggal</label>
-            <input type="date" name="start_date" value="<?= $start_date ?? date('Y-m-01') ?>" class="enterprise-input">
+            <input type="date" name="date_from" value="<?= $filters['date_from'] ?? date('Y-m-01') ?>" class="enterprise-input">
         </div>
 
         <div class="enterprise-form-group">
             <label class="enterprise-label">Sampai Tanggal</label>
-            <input type="date" name="end_date" value="<?= $end_date ?? date('Y-m-d') ?>" class="enterprise-input">
+            <input type="date" name="date_to" value="<?= $filters['date_to'] ?? date('Y-m-d') ?>" class="enterprise-input">
         </div>
 
         <div class="enterprise-form-group" style="display: flex; align-items: flex-end;">
