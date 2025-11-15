@@ -3,7 +3,7 @@
 <?= $this->section('content') ?>
 
 <div class="card">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <div class="card-header">
         <h2>Data Kelas</h2>
         <a href="<?= base_url('/master/classes/create') ?>" class="btn-primary">+ Tambah Kelas</a>
     </div>
@@ -27,7 +27,7 @@
             <tbody id="tableBody">
                 <?php if (empty($classes)): ?>
                     <tr>
-                        <td colspan="6" style="text-align: center; padding: 2rem;">Belum ada data kelas</td>
+                        <td colspan="6" class="text-center" style="padding: 2rem;">Belum ada data kelas</td>
                     </tr>
                 <?php else: ?>
                     <?php foreach ($classes as $index => $class): ?>
@@ -38,14 +38,13 @@
                             <td><?= esc($class['major'] ?? '-') ?></td>
                             <td><?= $class['student_count'] ?? 0 ?> siswa</td>
                             <td>
-                                <div style="display: flex; gap: 0.5rem;">
+                                <div class="btn-group">
                                     <a href="<?= base_url('/master/classes/edit/' . $class['id']) ?>"
-                                       class="btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.875rem;">
+                                       class="btn-secondary btn-sm">
                                         Edit
                                     </a>
                                     <a href="<?= base_url('/master/classes/delete/' . $class['id']) ?>"
-                                       class="btn-secondary"
-                                       style="padding: 0.5rem 1rem; font-size: 0.875rem; background: #ef4444; border-color: #ef4444; color: white;"
+                                       class="btn-danger btn-sm"
                                        onclick="return confirm('Yakin ingin menghapus kelas <?= esc($class['name']) ?>? Semua data siswa di kelas ini akan terhapus!')">
                                         Hapus
                                     </a>

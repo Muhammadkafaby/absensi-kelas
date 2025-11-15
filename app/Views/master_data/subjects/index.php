@@ -3,7 +3,7 @@
 <?= $this->section('content') ?>
 
 <div class="card">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <div class="card-header">
         <h2>Data Mata Pelajaran</h2>
         <a href="<?= base_url('/master/subjects/create') ?>" class="btn-primary">+ Tambah Mapel</a>
     </div>
@@ -36,9 +36,9 @@
                             <td><?= esc($subject['name']) ?></td>
                             <td><?= esc($subject['teacher_name'] ?? 'Belum ditentukan') ?></td>
                             <td>
-                                <div style="display: flex; gap: 0.5rem;">
+                                <div class="btn-group">
                                     <a href="<?= base_url('/master/subjects/edit/' . $subject['id']) ?>"
-                                       class="btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.875rem;">
+                                       class="btn-secondary btn-sm">
                                         Edit
                                     </a>
                                     <a href="<?= base_url('/master/subjects/delete/' . $subject['id']) ?>"

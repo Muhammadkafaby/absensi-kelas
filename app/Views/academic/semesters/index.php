@@ -3,14 +3,14 @@
 <?= $this->section('content') ?>
 
 <div class="card">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <div class="card-header">
         <h2>
             Semester
             <?php if ($selectedYear): ?>
                 - <?= esc($selectedYear['name']) ?>
             <?php endif; ?>
         </h2>
-        <div style="display: flex; gap: 0.5rem;">
+        <div class="btn-group">
             <?php if ($selectedYear): ?>
                 <a href="<?= base_url('/academic/semesters/create?year_id=' . $selectedYear['id']) ?>" class="btn-primary">
                     + Tambah Semester
@@ -74,29 +74,24 @@
                             <td><?= date('d M Y', strtotime($semester['end_date'])) ?></td>
                             <td>
                                 <?php if ($semester['is_active']): ?>
-                                    <span style="padding: 0.25rem 0.75rem; border-radius: 1rem; font-size: 0.75rem; font-weight: 600;
-                                                 background: #10b981; color: white;">
-                                        Aktif
-                                    </span>
+                                    <span class="badge badge-success">Aktif</span>
                                 <?php else: ?>
                                     <a href="<?= base_url('/academic/semesters/set-active/' . $semester['id']) ?>"
-                                       class="btn-secondary"
-                                       style="padding: 0.25rem 0.75rem; font-size: 0.75rem;"
+                                       class="badge badge-info"
+                                       style="cursor: pointer; text-decoration: none;"
                                        onclick="return confirm('Aktifkan semester <?= esc($semester['name']) ?>?')">
                                         Aktifkan
                                     </a>
                                 <?php endif; ?>
                             </td>
                             <td>
-                                <div style="display: flex; gap: 0.5rem;">
+                                <div class="btn-group">
                                     <a href="<?= base_url('/academic/semesters/edit/' . $semester['id']) ?>"
-                                       class="btn-secondary"
-                                       style="padding: 0.5rem 1rem; font-size: 0.875rem;">
+                                       class="btn-secondary btn-sm">
                                         Edit
                                     </a>
                                     <a href="<?= base_url('/academic/semesters/delete/' . $semester['id']) ?>"
-                                       class="btn-secondary"
-                                       style="padding: 0.5rem 1rem; font-size: 0.875rem; background: #ef4444; border-color: #ef4444; color: white;"
+                                       class="btn-danger btn-sm"
                                        onclick="return confirm('Yakin ingin menghapus semester <?= esc($semester['name']) ?>?')">
                                         Hapus
                                     </a>
