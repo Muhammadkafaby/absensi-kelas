@@ -2,20 +2,20 @@
 
 <?= $this->section('content') ?>
 
-<div class="dashboard-cards">
-    <div class="dashboard-card">
+<div class="dashboard-cards fade-in">
+    <div class="dashboard-card hover-lift fade-in-delay-1">
         <h3>Total Kelas</h3>
         <p><?= $total_classes ?> Kelas</p>
     </div>
-    <div class="dashboard-card">
+    <div class="dashboard-card hover-lift fade-in-delay-2">
         <h3>Total Siswa Aktif</h3>
         <p><?= $total_students ?> Siswa</p>
     </div>
-    <div class="dashboard-card">
+    <div class="dashboard-card hover-lift fade-in-delay-3">
         <h3>Total Guru</h3>
         <p><?= $total_teachers ?> Guru</p>
     </div>
-    <div class="dashboard-card">
+    <div class="dashboard-card hover-lift">
         <h3>Mata Pelajaran</h3>
         <p><?= $total_subjects ?> Mapel</p>
     </div>
@@ -24,22 +24,22 @@
 <!-- Charts Section -->
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
     <!-- Pie Chart: Status Kehadiran -->
-    <div class="card">
-        <h3 style="margin-bottom: 1rem;">Distribusi Kehadiran (30 Hari Terakhir)</h3>
+    <div class="card glass-card">
+        <h3 class="mb-2 gradient-text">Distribusi Kehadiran (30 Hari Terakhir)</h3>
         <canvas id="statusPieChart" style="max-height: 300px;"></canvas>
     </div>
 
     <!-- Line Chart: Trend Kehadiran -->
-    <div class="card">
-        <h3 style="margin-bottom: 1rem;">Trend Kehadiran (7 Hari Terakhir)</h3>
+    <div class="card glass-card">
+        <h3 class="mb-2 gradient-text">Trend Kehadiran (7 Hari Terakhir)</h3>
         <canvas id="trendLineChart" style="max-height: 300px;"></canvas>
     </div>
 </div>
 
 <!-- Bar Chart: Kehadiran per Kelas -->
 <?php if (!empty($chart_class_data)): ?>
-<div class="card">
-    <h3 style="margin-bottom: 1rem;">Persentase Kehadiran per Kelas (30 Hari Terakhir)</h3>
+<div class="card glass-card">
+    <h3 class="mb-2 gradient-text">Persentase Kehadiran per Kelas (30 Hari Terakhir)</h3>
     <canvas id="classBarChart" style="max-height: 400px;"></canvas>
 </div>
 <?php endif; ?>

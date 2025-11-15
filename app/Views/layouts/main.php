@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?= base_url('assets/css/style.css') ?>">
     <link rel="stylesheet" href="<?= base_url('assets/css/utilities.css') ?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/modern-effects.css') ?>">
     <link rel="stylesheet" href="<?= base_url('assets/css/toast.css') ?>">
     <?= $this->renderSection('extra_css') ?>
 </head>
