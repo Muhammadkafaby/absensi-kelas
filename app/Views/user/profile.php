@@ -2,10 +2,10 @@
 
 <?= $this->section('content') ?>
 
-<div class="card" style="max-width: 600px; margin: 0 auto;">
-    <h2>Profil Saya</h2>
+<div class="card glass-card fade-in" style="max-width: 600px; margin: 0 auto;">
+    <h2 class="gradient-text mb-2">👤 Profil Saya</h2>
 
-    <div style="background: var(--bg-secondary); padding: 1.5rem; border-radius: var(--border-radius-lg); margin-bottom: 2rem;">
+    <div class="alert alert-info mb-2">
         <div style="display: grid; gap: 1rem;">
             <div>
                 <strong style="color: var(--text-secondary); font-size: 0.875rem;">Username</strong>
@@ -44,7 +44,7 @@
         </div>
 
         <div class="button-group">
-            <button type="submit" class="btn-primary">Simpan Perubahan</button>
+            <button type="submit" class="btn-primary ripple">Simpan Perubahan</button>
             <a href="<?= base_url('/user/password/change') ?>" class="btn-secondary">Ganti Password</a>
         </div>
     </form>

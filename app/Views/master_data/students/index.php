@@ -2,12 +2,12 @@
 
 <?= $this->section('content') ?>
 
-<div class="card">
+<div class="card glass-card fade-in">
     <div class="card-header">
-        <h2>Data Siswa</h2>
+        <h2 class="gradient-text">👨‍🎓 Data Siswa</h2>
         <div class="btn-group">
             <a href="<?= base_url('/master/students/import') ?>" class="btn-secondary">📥 Import Excel</a>
-            <a href="<?= base_url('/master/students/create') ?>" class="btn-primary">+ Tambah Siswa</a>
+            <a href="<?= base_url('/master/students/create') ?>" class="btn-primary ripple">+ Tambah Siswa</a>
         </div>
     </div>
 

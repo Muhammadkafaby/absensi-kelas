@@ -2,8 +2,8 @@
 
 <?= $this->section('content') ?>
 
-<div class="card">
-    <h2>Filter Rekap</h2>
+<div class="card glass-card fade-in">
+    <h2 class="gradient-text mb-2">🔍 Filter Rekap</h2>
     <form action="<?= base_url('/recap/teacher') ?>" method="GET">
         <div class="form-row">
             <div class="form-group">
@@ -42,15 +42,15 @@
         </div>
 
         <div class="button-group">
-            <button type="submit" class="btn-primary">Tampilkan Rekap</button>
+            <button type="submit" class="btn-primary ripple">Tampilkan Rekap</button>
             <a href="<?= base_url('/recap/teacher') ?>" class="btn-secondary">Reset</a>
         </div>
     </form>
 </div>
 
 <?php if (!empty($recap_data)): ?>
-    <div class="card">
-        <h2>Hasil Rekap Siswa</h2>
+    <div class="card glass-card">
+        <h2 class="gradient-text mb-2">📊 Hasil Rekap Siswa</h2>
         <div class="table-container">
             <table>
                 <thead>
@@ -97,8 +97,8 @@
 <?php endif; ?>
 
 <?php if (!empty($sessions)): ?>
-    <div class="card">
-        <h2>Riwayat Sesi Absensi</h2>
+    <div class="card glass-card">
+        <h2 class="gradient-text mb-2">📅 Riwayat Sesi Absensi</h2>
         <div class="table-container">
             <table>
                 <thead>

@@ -2,17 +2,17 @@
 
 <?= $this->section('content') ?>
 
-<div class="card">
+<div class="card glass-card fade-in">
     <div class="card-header">
-        <h2>
-            Semester
+        <h2 class="gradient-text">
+            📚 Semester
             <?php if ($selectedYear): ?>
                 - <?= esc($selectedYear['name']) ?>
             <?php endif; ?>
         </h2>
         <div class="btn-group">
             <?php if ($selectedYear): ?>
-                <a href="<?= base_url('/academic/semesters/create?year_id=' . $selectedYear['id']) ?>" class="btn-primary">
+                <a href="<?= base_url('/academic/semesters/create?year_id=' . $selectedYear['id']) ?>" class="btn-primary ripple">
                     + Tambah Semester
                 </a>
             <?php endif; ?>
@@ -74,11 +74,11 @@
                             <td><?= date('d M Y', strtotime($semester['end_date'])) ?></td>
                             <td>
                                 <?php if ($semester['is_active']): ?>
-                                    <span class="badge badge-success">Aktif</span>
+                                    <span class="badge badge-success pulse-green">Aktif</span>
                                 <?php else: ?>
                                     <a href="<?= base_url('/academic/semesters/set-active/' . $semester['id']) ?>"
-                                       class="badge badge-info"
-                                       style="cursor: pointer; text-decoration: none;"
+                                       class="badge badge-info micro-interact"
+                                       style="cursor: pointer;"
                                        onclick="return confirm('Aktifkan semester <?= esc($semester['name']) ?>?')">
                                         Aktifkan
                                     </a>

@@ -2,8 +2,8 @@
 
 <?= $this->section('content') ?>
 
-<div class="card">
-    <h2><?= isset($student) ? 'Edit Data Siswa' : 'Tambah Siswa Baru' ?></h2>
+<div class="card glass-card fade-in">
+    <h2 class="gradient-text"><?= isset($student) ? '✏️ Edit Data Siswa' : '➕ Tambah Siswa Baru' ?></h2>
 
     <form action="<?= isset($student) ? base_url('/master/students/update/' . $student['id']) : base_url('/master/students/store') ?>" method="POST">
         <?= csrf_field() ?>
@@ -66,7 +66,7 @@
         </div>
 
         <div class="button-group">
-            <button type="submit" class="btn-primary">
+            <button type="submit" class="btn-primary ripple">
                 <?= isset($student) ? 'Update Data' : 'Simpan Siswa' ?>
             </button>
             <a href="<?= base_url('/master/students') ?>" class="btn-secondary">Batal</a>

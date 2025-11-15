@@ -2,8 +2,8 @@
 
 <?= $this->section('content') ?>
 
-<div class="card">
-    <h2>Filter Rekap Absensi</h2>
+<div class="card glass-card fade-in">
+    <h2 class="gradient-text mb-2">🔍 Filter Rekap Absensi</h2>
     <form action="<?= base_url('/recap/admin') ?>" method="GET">
         <div class="form-row">
             <div class="form-group">
@@ -42,21 +42,21 @@
         </div>
 
         <div class="button-group">
-            <button type="submit" class="btn-primary">Tampilkan Rekap</button>
+            <button type="submit" class="btn-primary ripple">Tampilkan Rekap</button>
             <a href="<?= base_url('/recap/admin') ?>" class="btn-secondary">Reset</a>
         </div>
     </form>
 </div>
 
 <?php if (!empty($recap_data)): ?>
-    <div class="card">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-            <h2>Hasil Rekap</h2>
-            <div class="button-group no-print" style="margin: 0;">
-                <a href="<?= base_url('/export/recap/excel?' . http_build_query($filters)) ?>" class="btn-primary" style="background: #10b981; border-color: #10b981;">
+    <div class="card glass-card">
+        <div class="flex-between mb-2">
+            <h2 class="gradient-text">📊 Hasil Rekap</h2>
+            <div class="btn-group no-print">
+                <a href="<?= base_url('/export/recap/excel?' . http_build_query($filters)) ?>" class="btn-success btn-sm micro-interact">
                     📊 Export Excel
                 </a>
-                <button type="button" onclick="window.print()" class="btn-secondary">
+                <button type="button" onclick="window.print()" class="btn-secondary btn-sm">
                     🖨️ Print
                 </button>
             </div>

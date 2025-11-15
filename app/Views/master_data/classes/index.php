@@ -2,10 +2,10 @@
 
 <?= $this->section('content') ?>
 
-<div class="card">
+<div class="card glass-card fade-in">
     <div class="card-header">
-        <h2>Data Kelas</h2>
-        <a href="<?= base_url('/master/classes/create') ?>" class="btn-primary">+ Tambah Kelas</a>
+        <h2 class="gradient-text">📚 Data Kelas</h2>
+        <a href="<?= base_url('/master/classes/create') ?>" class="btn-primary ripple">+ Tambah Kelas</a>
     </div>
 
     <div class="search-container">

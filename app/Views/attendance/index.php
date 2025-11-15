@@ -5,7 +5,8 @@
 <form action="<?= base_url('/attendance/store') ?>" method="POST" id="attendanceForm">
     <?= csrf_field() ?>
 
-    <div class="card controls-card">
+    <div class="card glass-card fade-in controls-card">
+        <h2 class="gradient-text mb-2">📝 Input Absensi</h2>
         <div class="form-row">
             <div class="form-group">
                 <label for="classSelect">Kelas *</label>
@@ -49,7 +50,7 @@
         </div>
     </div>
 
-    <div class="card">
+    <div class="card glass-card">
         <div class="search-container">
             <input type="text" id="searchInput" placeholder="Cari nama/NIS…">
         </div>
@@ -76,7 +77,7 @@
         </div>
 
         <div class="button-group">
-            <button type="submit" class="btn-primary">SIMPAN ABSENSI</button>
+            <button type="submit" class="btn-primary ripple">💾 SIMPAN ABSENSI</button>
         </div>
     </div>
 </form>

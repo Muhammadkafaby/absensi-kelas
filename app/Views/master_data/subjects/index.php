@@ -2,10 +2,10 @@
 
 <?= $this->section('content') ?>
 
-<div class="card">
+<div class="card glass-card fade-in">
     <div class="card-header">
-        <h2>Data Mata Pelajaran</h2>
-        <a href="<?= base_url('/master/subjects/create') ?>" class="btn-primary">+ Tambah Mapel</a>
+        <h2 class="gradient-text">📖 Data Mata Pelajaran</h2>
+        <a href="<?= base_url('/master/subjects/create') ?>" class="btn-primary ripple">+ Tambah Mapel</a>
     </div>
 
     <div class="search-container">
@@ -42,8 +42,7 @@
                                         Edit
                                     </a>
                                     <a href="<?= base_url('/master/subjects/delete/' . $subject['id']) ?>"
-                                       class="btn-secondary"
-                                       style="padding: 0.5rem 1rem; font-size: 0.875rem; background: #ef4444; border-color: #ef4444; color: white;"
+                                       class="btn-danger btn-sm"
                                        onclick="return confirm('Yakin ingin menghapus mapel <?= esc($subject['name']) ?>?')">
                                         Hapus
                                     </a>

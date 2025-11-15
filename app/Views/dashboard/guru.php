@@ -2,8 +2,8 @@
 
 <?= $this->section('content') ?>
 
-<div class="card">
-    <h2>Mata Pelajaran yang Diampu</h2>
+<div class="card glass-card fade-in">
+    <h2 class="gradient-text mb-2">📚 Mata Pelajaran yang Diampu</h2>
     <?php if (!empty($subjects)): ?>
         <ul style="list-style: none; padding: 0;">
             <?php foreach ($subjects as $subject): ?>
@@ -17,8 +17,8 @@
     <?php endif; ?>
 </div>
 
-<div class="card">
-    <h2>Riwayat Absensi Terakhir</h2>
+<div class="card glass-card">
+    <h2 class="gradient-text mb-2">📅 Riwayat Absensi Terakhir</h2>
     <?php if (!empty($recent_sessions)): ?>
         <div class="table-container">
             <table>
