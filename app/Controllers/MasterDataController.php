@@ -156,9 +156,32 @@ class MasterDataController extends BaseController
         }
 
         $studentModel = new StudentModel();
+        $classModel = new ClassModel();
+
+        // Get filter parameters
+        $filterClassId = $this->request->getGet('class_id');
+        $filterStatus = $this->request->getGet('status');
+
+        // Build query with filters
+        $builder = $studentModel->select('students.*, classes.name as class_name, classes.level, classes.major')
+                                ->join('classes', 'classes.id = students.class_id');
+
+        if ($filterClassId) {
+            $builder->where('students.class_id', $filterClassId);
+        }
+
+        if ($filterStatus) {
+            $builder->where('students.status', $filterStatus);
+        }
+
+        $students = $builder->orderBy('students.name', 'ASC')->findAll();
+
         $data = [
-            'title'    => 'Data Siswa',
-            'students' => $studentModel->getStudentsWithClass(),
+            'title'           => 'Data Siswa',
+            'students'        => $students,
+            'classes'         => $classModel->findAll(),
+            'filter_class_id' => $filterClassId,
+            'filter_status'   => $filterStatus,
         ];
 
         return view('master_data/students/enterprise_index', $data);
@@ -269,6 +292,68 @@ class MasterDataController extends BaseController
         }
 
         return redirect()->to('/master/students');
+    }
+
+    /**
+     * Export students to Excel
+     */
+    public function exportStudents()
+    {
+        if (session()->get('role') !== 'admin') {
+            return redirect()->to('/dashboard')->with('error', 'Akses ditolak');
+        }
+
+        $studentModel = new StudentModel();
+        $students = $studentModel->getStudentsWithClass();
+
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Header
+        $sheet->setCellValue('A1', 'No');
+        $sheet->setCellValue('B1', 'NIS');
+        $sheet->setCellValue('C1', 'NISN');
+        $sheet->setCellValue('D1', 'Nama');
+        $sheet->setCellValue('E1', 'Kelas');
+        $sheet->setCellValue('F1', 'Jenis Kelamin');
+        $sheet->setCellValue('G1', 'Status');
+
+        // Style header
+        $sheet->getStyle('A1:G1')->applyFromArray([
+            'font' => ['bold' => true, 'color' => ['rgb' => 'FFFFFF']],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '10b981']
+            ],
+        ]);
+
+        // Data
+        $row = 2;
+        foreach ($students as $index => $student) {
+            $sheet->setCellValue('A' . $row, $index + 1);
+            $sheet->setCellValue('B' . $row, $student['nis']);
+            $sheet->setCellValue('C' . $row, $student['nisn'] ?? '');
+            $sheet->setCellValue('D' . $row, $student['name']);
+            $sheet->setCellValue('E' . $row, $student['class_name'] ?? '');
+            $sheet->setCellValue('F' . $row, $student['gender'] == 'L' ? 'Laki-laki' : 'Perempuan');
+            $sheet->setCellValue('G' . $row, $student['status'] == 'active' ? 'Aktif' : 'Tidak Aktif');
+            $row++;
+        }
+
+        // Auto-size
+        foreach (range('A', 'G') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+
+        $filename = 'Data_Siswa_' . date('Y-m-d_His') . '.xlsx';
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+
+        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+        $writer->save('php://output');
+        exit;
     }
 
     /**
