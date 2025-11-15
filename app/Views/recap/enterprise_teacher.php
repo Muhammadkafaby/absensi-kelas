@@ -139,12 +139,12 @@ foreach ($records ?? [] as $record) {
         <table class="enterprise-table" id="sessionsTable">
             <thead>
                 <tr>
-                    <th style="width: 60px;">No</th>
+                    <th style="width: 60px;" class="hide-mobile">No</th>
                     <th>Tanggal</th>
                     <th>Kelas</th>
                     <th>Mata Pelajaran</th>
-                    <th style="width: 120px;">Jam Ke</th>
-                    <th style="width: 120px;">Jumlah Siswa</th>
+                    <th style="width: 120px;" class="hide-mobile">Jam Ke</th>
+                    <th style="width: 120px;" class="hide-mobile">Jumlah Siswa</th>
                     <th style="width: 150px;">Aksi</th>
                 </tr>
             </thead>
@@ -153,7 +153,7 @@ foreach ($records ?? [] as $record) {
                     <?php $no = 1; ?>
                     <?php foreach ($sessions as $session): ?>
                         <tr>
-                            <td><strong><?= $no++ ?></strong></td>
+                            <td class="hide-mobile"><strong><?= $no++ ?></strong></td>
                             <td>
                                 <div style="display: flex; flex-direction: column;">
                                     <span style="font-weight: 600;">
@@ -170,12 +170,12 @@ foreach ($records ?? [] as $record) {
                                 </span>
                             </td>
                             <td><?= esc($session['subject_name']) ?></td>
-                            <td>
+                            <td class="hide-mobile">
                                 <span class="enterprise-badge badge-neutral">
                                     Jam <?= esc($session['lesson_hour']) ?>
                                 </span>
                             </td>
-                            <td>
+                            <td class="hide-mobile">
                                 <span class="enterprise-badge badge-success">
                                     <?= $session['count'] ?> siswa
                                 </span>
