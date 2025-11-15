@@ -37,7 +37,7 @@ class AcademicYearController extends BaseController
         }
 
         $data = ['title' => 'Tambah Tahun Ajaran'];
-        return view('academic/years/form', $data);
+        return view('academic/years/enterprise_form', $data);
     }
 
     /**
@@ -98,7 +98,7 @@ class AcademicYearController extends BaseController
             'year'  => $year,
         ];
 
-        return view('academic/years/form', $data);
+        return view('academic/years/enterprise_form', $data);
     }
 
     /**

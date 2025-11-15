@@ -61,7 +61,7 @@ class MasterDataController extends BaseController
         }
 
         $data = ['title' => 'Tambah Kelas'];
-        return view('master_data/classes/form', $data);
+        return view('master_data/classes/enterprise_form', $data);
     }
 
     public function storeClass()
@@ -105,7 +105,7 @@ class MasterDataController extends BaseController
             'class' => $class,
         ];
 
-        return view('master_data/classes/form', $data);
+        return view('master_data/classes/enterprise_form', $data);
     }
 
     public function updateClass($id)
@@ -176,7 +176,7 @@ class MasterDataController extends BaseController
             'classes' => $classModel->findAll(),
         ];
 
-        return view('master_data/students/form', $data);
+        return view('master_data/students/enterprise_form', $data);
     }
 
     public function storeStudent()
@@ -226,7 +226,7 @@ class MasterDataController extends BaseController
             'classes' => $classModel->findAll(),
         ];
 
-        return view('master_data/students/form', $data);
+        return view('master_data/students/enterprise_form', $data);
     }
 
     public function updateStudent($id)
@@ -281,7 +281,7 @@ class MasterDataController extends BaseController
         }
 
         $data = ['title' => 'Import Data Siswa'];
-        return view('master_data/students/import', $data);
+        return view('master_data/students/enterprise_import', $data);
     }
 
     /**
@@ -475,7 +475,7 @@ class MasterDataController extends BaseController
         }
 
         $data = ['title' => 'Tambah Guru'];
-        return view('master_data/teachers/form', $data);
+        return view('master_data/teachers/enterprise_form', $data);
     }
 
     public function storeTeacher()
@@ -519,7 +519,7 @@ class MasterDataController extends BaseController
             'teacher' => $teacher,
         ];
 
-        return view('master_data/teachers/form', $data);
+        return view('master_data/teachers/enterprise_form', $data);
     }
 
     public function updateTeacher($id)
@@ -590,7 +590,7 @@ class MasterDataController extends BaseController
             'teachers' => $teacherModel->findAll(),
         ];
 
-        return view('master_data/subjects/form', $data);
+        return view('master_data/subjects/enterprise_form', $data);
     }
 
     public function storeSubject()
@@ -637,7 +637,7 @@ class MasterDataController extends BaseController
             'teachers' => $teacherModel->findAll(),
         ];
 
-        return view('master_data/subjects/form', $data);
+        return view('master_data/subjects/enterprise_form', $data);
     }
 
     public function updateSubject($id)

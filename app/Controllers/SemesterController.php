@@ -59,7 +59,7 @@ class SemesterController extends BaseController
             'selectedYearId' => $yearId,
         ];
 
-        return view('academic/semesters/form', $data);
+        return view('academic/semesters/enterprise_form', $data);
     }
 
     /**
@@ -124,7 +124,7 @@ class SemesterController extends BaseController
             'years'    => $yearModel->orderBy('start_date', 'DESC')->findAll(),
         ];
 
-        return view('academic/semesters/form', $data);
+        return view('academic/semesters/enterprise_form', $data);
     }
 
     /**
