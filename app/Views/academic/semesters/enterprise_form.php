@@ -24,12 +24,12 @@
         <div style="display: flex; flex-direction: column; gap: 1.5rem;">
             <div class="form-row">
                 <div class="enterprise-form-group">
-                    <label for="year_id" class="enterprise-label enterprise-label-required">Tahun Ajaran</label>
-                    <select id="year_id" name="year_id" class="enterprise-select" required>
+                    <label for="academic_year_id" class="enterprise-label enterprise-label-required">Tahun Ajaran</label>
+                    <select id="academic_year_id" name="academic_year_id" class="enterprise-select" required>
                         <option value="">Pilih Tahun Ajaran</option>
                         <?php if (!empty($years)): ?>
                             <?php foreach ($years as $year): ?>
-                                <option value="<?= $year['id'] ?>" <?= old('year_id', $semester['year_id'] ?? '') == $year['id'] ? 'selected' : '' ?>>
+                                <option value="<?= $year['id'] ?>" <?= old('academic_year_id', $semester['academic_year_id'] ?? $selectedYearId ?? '') == $year['id'] ? 'selected' : '' ?>>
                                     <?= esc($year['name']) ?>
                                 </option>
                             <?php endforeach; ?>
@@ -37,11 +37,11 @@
                     </select>
                 </div>
                 <div class="enterprise-form-group">
-                    <label for="semester" class="enterprise-label enterprise-label-required">Semester</label>
-                    <select id="semester" name="semester" class="enterprise-select" required>
+                    <label for="name" class="enterprise-label enterprise-label-required">Nama Semester</label>
+                    <select id="name" name="name" class="enterprise-select" required>
                         <option value="">Pilih</option>
-                        <option value="1" <?= old('semester', $semester['semester'] ?? '') == '1' ? 'selected' : '' ?>>Semester 1</option>
-                        <option value="2" <?= old('semester', $semester['semester'] ?? '') == '2' ? 'selected' : '' ?>>Semester 2</option>
+                        <option value="Semester 1" <?= old('name', $semester['name'] ?? '') == 'Semester 1' ? 'selected' : '' ?>>Semester 1</option>
+                        <option value="Semester 2" <?= old('name', $semester['name'] ?? '') == 'Semester 2' ? 'selected' : '' ?>>Semester 2</option>
                     </select>
                 </div>
             </div>

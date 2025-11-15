@@ -29,9 +29,9 @@
             <div style="font-weight: 600; margin-bottom: 0.5rem; color: var(--enterprise-info-600);">Format Excel yang Didukung:</div>
             <ul style="margin: 0; padding-left: 1.5rem; color: var(--enterprise-text-secondary);">
                 <li>File format: .xlsx atau .xls</li>
-                <li>Kolom yang diperlukan: NIS, Nama, Kelas</li>
+                <li>Kolom yang diperlukan: NIS, NISN (opsional), Nama, Kelas, Jenis Kelamin</li>
                 <li>Baris pertama adalah header (akan diabaikan)</li>
-                <li>Maksimal 1000 baris per file</li>
+                <li>Jenis Kelamin: gunakan L untuk Laki-laki, P untuk Perempuan</li>
             </ul>
         </div>
 
@@ -51,20 +51,26 @@
                     <thead style="background: var(--enterprise-bg-tertiary);">
                         <tr>
                             <th style="padding: 0.75rem; border: 1px solid var(--enterprise-border); text-align: left;">NIS</th>
+                            <th style="padding: 0.75rem; border: 1px solid var(--enterprise-border); text-align: left;">NISN</th>
                             <th style="padding: 0.75rem; border: 1px solid var(--enterprise-border); text-align: left;">Nama</th>
                             <th style="padding: 0.75rem; border: 1px solid var(--enterprise-border); text-align: left;">Kelas</th>
+                            <th style="padding: 0.75rem; border: 1px solid var(--enterprise-border); text-align: left;">JK</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td style="padding: 0.75rem; border: 1px solid var(--enterprise-border);">12345</td>
+                            <td style="padding: 0.75rem; border: 1px solid var(--enterprise-border);">0012345678</td>
                             <td style="padding: 0.75rem; border: 1px solid var(--enterprise-border);">Ahmad Fadli</td>
                             <td style="padding: 0.75rem; border: 1px solid var(--enterprise-border);">X-1</td>
+                            <td style="padding: 0.75rem; border: 1px solid var(--enterprise-border);">L</td>
                         </tr>
                         <tr>
                             <td style="padding: 0.75rem; border: 1px solid var(--enterprise-border);">12346</td>
+                            <td style="padding: 0.75rem; border: 1px solid var(--enterprise-border);">0012345679</td>
                             <td style="padding: 0.75rem; border: 1px solid var(--enterprise-border);">Siti Nurhaliza</td>
                             <td style="padding: 0.75rem; border: 1px solid var(--enterprise-border);">X-2</td>
+                            <td style="padding: 0.75rem; border: 1px solid var(--enterprise-border);">P</td>
                         </tr>
                     </tbody>
                 </table>
