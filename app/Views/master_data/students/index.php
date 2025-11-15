@@ -3,15 +3,15 @@
 <?= $this->section('content') ?>
 
 <div class="card">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <div class="card-header">
         <h2>Data Siswa</h2>
-        <div style="display: flex; gap: 0.5rem;">
+        <div class="btn-group">
             <a href="<?= base_url('/master/students/import') ?>" class="btn-secondary">📥 Import Excel</a>
             <a href="<?= base_url('/master/students/create') ?>" class="btn-primary">+ Tambah Siswa</a>
         </div>
     </div>
 
-    <div class="form-row" style="margin-bottom: 1rem;">
+    <div class="form-row mb-2">
         <div class="form-group">
             <input type="text" id="searchInput" placeholder="Cari nama / NIS / NISN...">
         </div>
@@ -67,20 +67,18 @@
                             <td><?= esc($student['class_name']) ?></td>
                             <td><?= $student['gender'] ?></td>
                             <td>
-                                <span style="padding: 0.25rem 0.75rem; border-radius: 1rem; font-size: 0.75rem; font-weight: 600;
-                                             background: <?= $student['status'] == 'active' ? '#10b981' : '#ef4444' ?>; color: white;">
+                                <span class="badge <?= $student['status'] == 'active' ? 'badge-success' : 'badge-danger' ?>">
                                     <?= $student['status'] == 'active' ? 'Aktif' : 'Non-Aktif' ?>
                                 </span>
                             </td>
                             <td>
-                                <div style="display: flex; gap: 0.5rem;">
+                                <div class="btn-group">
                                     <a href="<?= base_url('/master/students/edit/' . $student['id']) ?>"
-                                       class="btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.875rem;">
+                                       class="btn-secondary btn-sm">
                                         Edit
                                     </a>
                                     <a href="<?= base_url('/master/students/delete/' . $student['id']) ?>"
-                                       class="btn-secondary"
-                                       style="padding: 0.5rem 1rem; font-size: 0.875rem; background: #ef4444; border-color: #ef4444; color: white;"
+                                       class="btn-danger btn-sm"
                                        onclick="return confirm('Yakin ingin menghapus siswa <?= esc($student['name']) ?>?')">
                                         Hapus
                                     </a>

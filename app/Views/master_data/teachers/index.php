@@ -3,7 +3,7 @@
 <?= $this->section('content') ?>
 
 <div class="card">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <div class="card-header">
         <h2>Data Guru</h2>
         <a href="<?= base_url('/master/teachers/create') ?>" class="btn-primary">+ Tambah Guru</a>
     </div>
@@ -38,9 +38,9 @@
                             <td><?= esc($teacher['phone'] ?? '-') ?></td>
                             <td><?= $teacher['subject_count'] ?? 0 ?> mapel</td>
                             <td>
-                                <div style="display: flex; gap: 0.5rem;">
+                                <div class="btn-group">
                                     <a href="<?= base_url('/master/teachers/edit/' . $teacher['id']) ?>"
-                                       class="btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.875rem;">
+                                       class="btn-secondary btn-sm">
                                         Edit
                                     </a>
                                     <a href="<?= base_url('/master/teachers/delete/' . $teacher['id']) ?>"
