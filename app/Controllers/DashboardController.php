@@ -38,7 +38,9 @@ class DashboardController extends BaseController
         $teacherModel = new TeacherModel();
         $subjectModel = new SubjectModel();
         $recordModel = new AttendanceRecordModel();
+        $sessionModel = new AttendanceSessionModel();
 
+        // Basic stats
         $data = [
             'title'         => 'Dashboard Admin',
             'total_classes' => $classModel->countAll(),
@@ -47,6 +49,57 @@ class DashboardController extends BaseController
             'total_subjects' => $subjectModel->countAll(),
             'alpa_today'    => $recordModel->getTodayAlpaStudents(),
         ];
+
+        // Chart data: Attendance by Status (Last 30 days)
+        $db = \Config\Database::connect();
+        $attendanceStats = $db->query("
+            SELECT
+                ar.status,
+                COUNT(*) as count
+            FROM attendance_records ar
+            JOIN attendance_sessions asess ON asess.id = ar.attendance_session_id
+            WHERE asess.date >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
+            GROUP BY ar.status
+        ")->getResultArray();
+
+        $statusData = ['H' => 0, 'I' => 0, 'S' => 0, 'A' => 0, 'T' => 0];
+        foreach ($attendanceStats as $stat) {
+            $statusData[$stat['status']] = (int)$stat['count'];
+        }
+        $data['chart_status_data'] = $statusData;
+
+        // Chart data: Attendance by Class (Last 30 days)
+        $attendanceByClass = $db->query("
+            SELECT
+                c.name as class_name,
+                COUNT(CASE WHEN ar.status = 'H' THEN 1 END) as hadir,
+                COUNT(*) as total
+            FROM classes c
+            LEFT JOIN students s ON s.class_id = c.id
+            LEFT JOIN attendance_records ar ON ar.student_id = s.id
+            LEFT JOIN attendance_sessions asess ON asess.id = ar.attendance_session_id
+            WHERE asess.date >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
+            GROUP BY c.id, c.name
+            ORDER BY c.name
+            LIMIT 10
+        ")->getResultArray();
+
+        $data['chart_class_data'] = $attendanceByClass;
+
+        // Chart data: Trend 7 hari terakhir
+        $trendData = $db->query("
+            SELECT
+                asess.date,
+                COUNT(CASE WHEN ar.status = 'H' THEN 1 END) as hadir,
+                COUNT(*) as total
+            FROM attendance_sessions asess
+            JOIN attendance_records ar ON ar.attendance_session_id = asess.id
+            WHERE asess.date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+            GROUP BY asess.date
+            ORDER BY asess.date ASC
+        ")->getResultArray();
+
+        $data['chart_trend_data'] = $trendData;
 
         return view('dashboard/admin', $data);
     }
@@ -77,6 +130,39 @@ class DashboardController extends BaseController
             'recent_sessions' => $recentSessions,
             'total_sessions'  => count($recentSessions),
         ];
+
+        // Chart data untuk guru: Status attendance dari sessions yang dibuat
+        $db = \Config\Database::connect();
+        $teacherStats = $db->query("
+            SELECT
+                ar.status,
+                COUNT(*) as count
+            FROM attendance_records ar
+            JOIN attendance_sessions asess ON asess.id = ar.attendance_session_id
+            WHERE asess.teacher_id = ? AND asess.date >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
+            GROUP BY ar.status
+        ", [$teacherId])->getResultArray();
+
+        $statusData = ['H' => 0, 'I' => 0, 'S' => 0, 'A' => 0, 'T' => 0];
+        foreach ($teacherStats as $stat) {
+            $statusData[$stat['status']] = (int)$stat['count'];
+        }
+        $data['chart_status_data'] = $statusData;
+
+        // Trend 7 hari terakhir untuk guru
+        $teacherTrend = $db->query("
+            SELECT
+                asess.date,
+                COUNT(CASE WHEN ar.status = 'H' THEN 1 END) as hadir,
+                COUNT(*) as total
+            FROM attendance_sessions asess
+            JOIN attendance_records ar ON ar.attendance_session_id = asess.id
+            WHERE asess.teacher_id = ? AND asess.date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+            GROUP BY asess.date
+            ORDER BY asess.date ASC
+        ", [$teacherId])->getResultArray();
+
+        $data['chart_trend_data'] = $teacherTrend;
 
         return view('dashboard/guru', $data);
     }

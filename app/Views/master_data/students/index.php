@@ -5,7 +5,10 @@
 <div class="card">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
         <h2>Data Siswa</h2>
-        <a href="<?= base_url('/master/students/create') ?>" class="btn-primary">+ Tambah Siswa</a>
+        <div style="display: flex; gap: 0.5rem;">
+            <a href="<?= base_url('/master/students/import') ?>" class="btn-secondary">📥 Import Excel</a>
+            <a href="<?= base_url('/master/students/create') ?>" class="btn-primary">+ Tambah Siswa</a>
+        </div>
     </div>
 
     <div class="form-row" style="margin-bottom: 1rem;">

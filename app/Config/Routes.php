@@ -33,6 +33,33 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
         $routes->get('students/excel', 'ExportController::exportStudentsExcel');
     });
 
+    // ==================== ACTIVITY LOGS (Admin only) ====================
+    $routes->group('activity-logs', ['filter' => 'role:admin'], function ($routes) {
+        $routes->get('/', 'ActivityLogController::index');
+        $routes->post('clear', 'ActivityLogController::clearOld');
+    });
+
+    // ==================== ACADEMIC MANAGEMENT (Admin only) ====================
+    $routes->group('academic', ['filter' => 'role:admin'], function ($routes) {
+        // Academic Years
+        $routes->get('years', 'AcademicYearController::index');
+        $routes->get('years/create', 'AcademicYearController::create');
+        $routes->post('years/store', 'AcademicYearController::store');
+        $routes->get('years/edit/(:num)', 'AcademicYearController::edit/$1');
+        $routes->post('years/update/(:num)', 'AcademicYearController::update/$1');
+        $routes->get('years/delete/(:num)', 'AcademicYearController::delete/$1');
+        $routes->get('years/set-active/(:num)', 'AcademicYearController::setActive/$1');
+
+        // Semesters
+        $routes->get('semesters', 'SemesterController::index');
+        $routes->get('semesters/create', 'SemesterController::create');
+        $routes->post('semesters/store', 'SemesterController::store');
+        $routes->get('semesters/edit/(:num)', 'SemesterController::edit/$1');
+        $routes->post('semesters/update/(:num)', 'SemesterController::update/$1');
+        $routes->get('semesters/delete/(:num)', 'SemesterController::delete/$1');
+        $routes->get('semesters/set-active/(:num)', 'SemesterController::setActive/$1');
+    });
+
     // ==================== ATTENDANCE ROUTES (Guru only) ====================
     $routes->group('attendance', ['filter' => 'role:guru'], function ($routes) {
         $routes->get('/', 'AttendanceController::index');
@@ -59,6 +86,9 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
         $routes->get('students/edit/(:num)', 'MasterDataController::editStudent/$1');
         $routes->post('students/update/(:num)', 'MasterDataController::updateStudent/$1');
         $routes->get('students/delete/(:num)', 'MasterDataController::deleteStudent/$1');
+        $routes->get('students/import', 'MasterDataController::importStudentsForm');
+        $routes->post('students/import/process', 'MasterDataController::importStudentsProcess');
+        $routes->get('students/template', 'MasterDataController::downloadStudentTemplate');
 
         // Teachers
         $routes->get('teachers', 'MasterDataController::teachers');

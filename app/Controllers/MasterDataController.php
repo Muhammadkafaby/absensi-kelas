@@ -7,6 +7,7 @@ use App\Models\ClassModel;
 use App\Models\StudentModel;
 use App\Models\TeacherModel;
 use App\Models\SubjectModel;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class MasterDataController extends BaseController
 {
@@ -259,6 +260,186 @@ class MasterDataController extends BaseController
         }
 
         return redirect()->to('/master/students');
+    }
+
+    /**
+     * Form import siswa dari Excel
+     */
+    public function importStudentsForm()
+    {
+        if (session()->get('role') !== 'admin') {
+            return redirect()->to('/dashboard')->with('error', 'Akses ditolak');
+        }
+
+        $data = ['title' => 'Import Data Siswa'];
+        return view('master_data/students/import', $data);
+    }
+
+    /**
+     * Proses import siswa dari Excel
+     */
+    public function importStudentsProcess()
+    {
+        if (session()->get('role') !== 'admin') {
+            return redirect()->to('/dashboard')->with('error', 'Akses ditolak');
+        }
+
+        $file = $this->request->getFile('excel_file');
+
+        if (!$file || !$file->isValid()) {
+            session()->setFlashdata('error', 'File tidak valid');
+            return redirect()->back();
+        }
+
+        // Validate file extension
+        $extension = $file->getClientExtension();
+        if (!in_array($extension, ['xlsx', 'xls'])) {
+            session()->setFlashdata('error', 'File harus berformat Excel (.xlsx atau .xls)');
+            return redirect()->back();
+        }
+
+        try {
+            // Load Excel file
+            $spreadsheet = IOFactory::load($file->getTempName());
+            $worksheet = $spreadsheet->getActiveSheet();
+            $rows = $worksheet->toArray();
+
+            // Skip header row
+            array_shift($rows);
+
+            $studentModel = new StudentModel();
+            $classModel = new ClassModel();
+
+            // Get all classes for mapping
+            $classes = $classModel->findAll();
+            $classMap = [];
+            foreach ($classes as $class) {
+                $classMap[strtolower($class['name'])] = $class['id'];
+            }
+
+            $imported = 0;
+            $errors = [];
+
+            foreach ($rows as $index => $row) {
+                // Skip empty rows
+                if (empty($row[0]) && empty($row[1])) {
+                    continue;
+                }
+
+                $rowNum = $index + 2; // +2 karena array start dari 0 dan skip header
+
+                // Validate required fields
+                if (empty($row[0]) || empty($row[2]) || empty($row[3])) {
+                    $errors[] = "Baris $rowNum: NIS, Nama, dan Kelas wajib diisi";
+                    continue;
+                }
+
+                // Map class name to ID
+                $className = strtolower(trim($row[3]));
+                if (!isset($classMap[$className])) {
+                    $errors[] = "Baris $rowNum: Kelas '{$row[3]}' tidak ditemukan";
+                    continue;
+                }
+
+                // Validate gender
+                $gender = strtoupper(trim($row[4]));
+                if (!in_array($gender, ['L', 'P'])) {
+                    $errors[] = "Baris $rowNum: Jenis kelamin harus L atau P";
+                    continue;
+                }
+
+                // Prepare data
+                $data = [
+                    'nis'      => trim($row[0]),
+                    'nisn'     => !empty($row[1]) ? trim($row[1]) : null,
+                    'name'     => trim($row[2]),
+                    'class_id' => $classMap[$className],
+                    'gender'   => $gender,
+                    'status'   => 'active',
+                ];
+
+                // Check if NIS already exists
+                $existing = $studentModel->where('nis', $data['nis'])->first();
+                if ($existing) {
+                    $errors[] = "Baris $rowNum: NIS {$data['nis']} sudah terdaftar";
+                    continue;
+                }
+
+                // Insert student
+                if ($studentModel->insert($data)) {
+                    $imported++;
+                } else {
+                    $validationErrors = $studentModel->errors();
+                    $errors[] = "Baris $rowNum: " . implode(', ', $validationErrors);
+                }
+            }
+
+            // Prepare result message
+            $message = "Berhasil import $imported siswa";
+            if (!empty($errors)) {
+                $message .= ". " . count($errors) . " baris gagal diimport.";
+                session()->setFlashdata('import_errors', $errors);
+            }
+
+            session()->setFlashdata($imported > 0 ? 'success' : 'error', $message);
+            return redirect()->to('/master/students');
+
+        } catch (\Exception $e) {
+            session()->setFlashdata('error', 'Gagal membaca file Excel: ' . $e->getMessage());
+            return redirect()->back();
+        }
+    }
+
+    /**
+     * Download template Excel untuk import siswa
+     */
+    public function downloadStudentTemplate()
+    {
+        if (session()->get('role') !== 'admin') {
+            return redirect()->to('/dashboard')->with('error', 'Akses ditolak');
+        }
+
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Header
+        $sheet->setCellValue('A1', 'NIS');
+        $sheet->setCellValue('B1', 'NISN');
+        $sheet->setCellValue('C1', 'Nama');
+        $sheet->setCellValue('D1', 'Kelas');
+        $sheet->setCellValue('E1', 'JK');
+
+        // Style header
+        $sheet->getStyle('A1:E1')->applyFromArray([
+            'font' => ['bold' => true],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '6366F1']
+            ],
+            'font' => ['color' => ['rgb' => 'FFFFFF']],
+        ]);
+
+        // Sample data
+        $sheet->setCellValue('A2', '2024001');
+        $sheet->setCellValue('B2', '0012345678');
+        $sheet->setCellValue('C2', 'Contoh Siswa');
+        $sheet->setCellValue('D2', 'X-1');
+        $sheet->setCellValue('E2', 'L');
+
+        // Auto-size
+        foreach (range('A', 'E') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+
+        $filename = 'Template_Import_Siswa.xlsx';
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+
+        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+        $writer->save('php://output');
+        exit;
     }
 
     // ==================== TEACHERS ====================

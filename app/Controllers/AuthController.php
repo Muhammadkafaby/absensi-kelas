@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\UserModel;
+use App\Models\ActivityLogModel;
 
 class AuthController extends BaseController
 {
@@ -61,6 +62,10 @@ class AuthController extends BaseController
 
         session()->set($sessionData);
 
+        // Log activity
+        $logModel = new ActivityLogModel();
+        $logModel->log('LOGIN', "User {$user['username']} berhasil login", $user['id']);
+
         // Redirect ke dashboard dengan pesan sukses
         session()->setFlashdata('success', 'Selamat datang, ' . $user['name']);
         return redirect()->to('/dashboard');
@@ -71,6 +76,12 @@ class AuthController extends BaseController
      */
     public function logout()
     {
+        // Log activity before destroying session
+        $logModel = new ActivityLogModel();
+        $username = session()->get('username');
+        $userId = session()->get('user_id');
+        $logModel->log('LOGOUT', "User {$username} logout", $userId);
+
         session()->destroy();
         session()->setFlashdata('success', 'Anda telah berhasil logout');
         return redirect()->to('/login');
