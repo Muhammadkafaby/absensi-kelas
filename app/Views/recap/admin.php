@@ -50,7 +50,17 @@
 
 <?php if (!empty($recap_data)): ?>
     <div class="card">
-        <h2>Hasil Rekap</h2>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h2>Hasil Rekap</h2>
+            <div class="button-group no-print" style="margin: 0;">
+                <a href="<?= base_url('/export/recap/excel?' . http_build_query($filters)) ?>" class="btn-primary" style="background: #10b981; border-color: #10b981;">
+                    📊 Export Excel
+                </a>
+                <button type="button" onclick="window.print()" class="btn-secondary">
+                    🖨️ Print
+                </button>
+            </div>
+        </div>
         <div class="table-container">
             <table>
                 <thead>

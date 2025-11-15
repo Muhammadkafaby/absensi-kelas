@@ -5,25 +5,42 @@ Sistem Absensi Kelas berbasis web untuk SMA NU Kaplongan yang dibangun menggunak
 ## 🎯 Fitur Utama
 
 ### Untuk Admin / TU (Tata Usaha)
-- ✅ Dashboard dengan ringkasan data
-- ✅ Manajemen Master Data:
-  - Kelas (CRUD)
-  - Siswa (CRUD)
-  - Guru (CRUD)
-  - Mata Pelajaran (CRUD)
-- ✅ Rekap Absensi Global (semua kelas, semua guru)
-- ✅ Monitoring siswa yang alpa hari ini
+- ✅ Dashboard dengan ringkasan data dan statistik
+- ✅ **Manajemen Master Data Lengkap**:
+  - **Kelas**: CRUD dengan pencarian dan filter tingkat/jurusan
+  - **Siswa**: CRUD dengan filter kelas, status, pencarian NIS/nama
+  - **Guru**: CRUD dengan pencarian nama/NIP
+  - **Mata Pelajaran**: CRUD dengan assignment guru pengampu
+  - **Tahun Ajaran & Semester**: Manajemen periode akademik
+- ✅ **Rekap Absensi Global** (semua kelas, semua guru):
+  - Filter multi-kriteria (kelas, mapel, tanggal)
+  - Perhitungan statistik H/I/S/A/T
+  - **Export ke Excel** dengan format profesional
+  - **Print** dengan layout optimized
+- ✅ **Monitoring Real-time**: Siswa yang alpa hari ini
+- ✅ **Export Data**: Download data siswa dan rekap ke Excel
 
 ### Untuk Guru
 - ✅ Dashboard pribadi dengan mata pelajaran yang diampu
-- ✅ Input Absensi:
+- ✅ **Input Absensi**:
   - Pilih kelas, tanggal, jam pelajaran, dan mata pelajaran
   - Tandai kehadiran siswa: H (Hadir), I (Izin), S (Sakit), A (Alpa), T (Terlambat)
+  - Quick actions: "Semua Hadir" dan "Reset"
+  - Pencarian siswa by nama/NIS
   - Tambahkan catatan untuk setiap siswa
-- ✅ Rekap Absensi:
+- ✅ **Rekap Absensi Pribadi**:
   - Lihat riwayat absensi yang sudah diinput
   - Filter berdasarkan kelas, mata pelajaran, dan tanggal
-  - Perhitungan persentase kehadiran
+  - Perhitungan persentase kehadiran per siswa
+  - **Export ke Excel**
+  - **Print rekap**
+
+### Untuk Semua User
+- ✅ **Profil Pengguna**: Update nama dan email
+- ✅ **Ganti Password**: Ubah password dengan validasi keamanan
+- ✅ **Validasi Bahasa Indonesia**: Pesan error dalam Bahasa Indonesia
+- ✅ **Session Management**: Auto-logout setelah 2 jam
+- ✅ **Responsive Design**: Optimal di desktop dan mobile
 
 ## 🛠️ Teknologi yang Digunakan
 
@@ -31,6 +48,9 @@ Sistem Absensi Kelas berbasis web untuk SMA NU Kaplongan yang dibangun menggunak
 - **Database**: MySQL / MariaDB
 - **Frontend**: HTML5, CSS3, JavaScript (Vanilla)
 - **PHP Version**: 8.0+
+- **Libraries**:
+  - PhpSpreadsheet 5.2.0 (Excel export/import)
+  - Password hashing (bcrypt)
 
 ## 📋 Database Schema
 
@@ -43,6 +63,8 @@ Sistem Absensi Kelas berbasis web untuk SMA NU Kaplongan yang dibangun menggunak
 5. **subjects** - Data mata pelajaran dengan relasi ke guru pengampu
 6. **attendance_sessions** - Sesi absensi (pertemuan)
 7. **attendance_records** - Record kehadiran per siswa per sesi
+8. **academic_years** - Tahun ajaran (2024/2025, dll)
+9. **semesters** - Semester (Ganjil/Genap) per tahun ajaran
 
 ### Relasi Database
 
@@ -96,8 +118,10 @@ database.default.port = 3306
 
 ### 4. Jalankan Migrasi dan Seeder
 
+**PENTING**: Jalankan migrasi terlebih dahulu, baru seeder!
+
 ```bash
-# Jalankan migrasi untuk membuat tabel
+# Jalankan migrasi untuk membuat semua tabel (users, classes, students, teachers, subjects, attendance, academic_years, semesters)
 php spark migrate
 
 # Jalankan seeder untuk mengisi data sample

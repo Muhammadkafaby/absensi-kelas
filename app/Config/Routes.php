@@ -19,6 +19,20 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
     // Dashboard (accessible by both admin & guru)
     $routes->get('/dashboard', 'DashboardController::index');
 
+    // ==================== USER PROFILE & PASSWORD ====================
+    $routes->group('user', function ($routes) {
+        $routes->get('profile', 'UserController::profile');
+        $routes->post('profile/update', 'UserController::updateProfile');
+        $routes->get('password/change', 'UserController::changePassword');
+        $routes->post('password/update', 'UserController::updatePassword');
+    });
+
+    // ==================== EXPORT ROUTES ====================
+    $routes->group('export', function ($routes) {
+        $routes->get('recap/excel', 'ExportController::exportRecapExcel');
+        $routes->get('students/excel', 'ExportController::exportStudentsExcel');
+    });
+
     // ==================== ATTENDANCE ROUTES (Guru only) ====================
     $routes->group('attendance', ['filter' => 'role:guru'], function ($routes) {
         $routes->get('/', 'AttendanceController::index');
