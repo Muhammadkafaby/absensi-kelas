@@ -778,3 +778,279 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
 }
+
+/* ================================================================
+   RESPONSIVE DESIGN - MOBILE OPTIMIZATION
+   ================================================================ */
+
+/* Tablet and below */
+@media (max-width: 1024px) {
+    .enterprise-table-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .table-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .table-search {
+        max-width: 100%;
+        min-width: 100%;
+    }
+    
+    .table-actions {
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+}
+
+/* Mobile devices */
+@media (max-width: 768px) {
+    /* ===== CARDS ===== */
+    .enterprise-card {
+        padding: var(--space-4);
+        border-radius: var(--radius-lg);
+    }
+    
+    .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-3);
+    }
+    
+    .card-actions {
+        width: 100%;
+        justify-content: flex-start;
+    }
+    
+    /* ===== BUTTONS ===== */
+    .btn-enterprise {
+        padding: var(--space-3) var(--space-4);
+        font-size: var(--font-size-sm);
+    }
+    
+    .btn-enterprise span:first-child {
+        font-size: 1rem;
+    }
+    
+    .btn-enterprise-sm {
+        padding: var(--space-2) var(--space-3);
+        font-size: 0.75rem;
+    }
+    
+    /* Stack buttons vertically on very small screens */
+    .card-actions .btn-enterprise,
+    .form-actions .btn-enterprise {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    /* ===== FORMS ===== */
+    .form-row {
+        flex-direction: column;
+        gap: var(--space-4);
+    }
+    
+    .form-row .enterprise-form-group {
+        width: 100%;
+    }
+    
+    .enterprise-form-group {
+        margin-bottom: var(--space-4);
+    }
+    
+    .enterprise-label {
+        font-size: var(--font-size-sm);
+        margin-bottom: var(--space-2);
+    }
+    
+    .enterprise-input,
+    .enterprise-select,
+    .enterprise-textarea {
+        font-size: 16px; /* Prevent zoom on iOS */
+        padding: var(--space-3);
+    }
+    
+    /* ===== TABLES ===== */
+    .enterprise-table {
+        font-size: var(--font-size-xs);
+    }
+    
+    .enterprise-table th,
+    .enterprise-table td {
+        padding: var(--space-3);
+        white-space: nowrap;
+    }
+    
+    .enterprise-table th:first-child,
+    .enterprise-table td:first-child {
+        position: sticky;
+        left: 0;
+        background: var(--enterprise-bg-primary);
+        z-index: 1;
+    }
+    
+    /* Button groups in tables */
+    .enterprise-table td > div {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 0.25rem;
+    }
+    
+    .enterprise-table .btn-sm span:last-child {
+        display: none; /* Hide button text, keep icon only */
+    }
+    
+    /* ===== BADGES ===== */
+    .enterprise-badge {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.625rem;
+    }
+    
+    /* ===== FILTERS ===== */
+    .filters-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-3);
+    }
+    
+    .filter-row {
+        flex-direction: column;
+        gap: var(--space-3);
+    }
+    
+    .filter-row .enterprise-form-group {
+        width: 100%;
+    }
+    
+    /* ===== PAGE HEADER ===== */
+    .page-header {
+        flex-direction: column;
+        gap: var(--space-4);
+        align-items: flex-start;
+    }
+    
+    .page-title {
+        font-size: 1.5rem;
+    }
+    
+    .page-subtitle {
+        font-size: var(--font-size-sm);
+    }
+    
+    /* ===== STATS GRID ===== */
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-4);
+    }
+    
+    .stat-card {
+        padding: var(--space-4);
+    }
+    
+    /* ===== MODALS ===== */
+    .modal-content {
+        width: 95%;
+        max-width: 95%;
+        margin: var(--space-4);
+    }
+    
+    .modal-header h3 {
+        font-size: 1.125rem;
+    }
+    
+    /* ===== EMPTY STATES ===== */
+    .empty-state-icon {
+        font-size: 3rem;
+    }
+    
+    .empty-state-title {
+        font-size: 1.125rem;
+    }
+    
+    .empty-state-message {
+        font-size: var(--font-size-sm);
+    }
+    
+    /* ===== SPACING UTILITIES ===== */
+    .mb-6 { margin-bottom: var(--space-4); }
+    .mb-8 { margin-bottom: var(--space-6); }
+    .mt-6 { margin-top: var(--space-4); }
+    .mt-8 { margin-top: var(--space-6); }
+    
+    .p-6 { padding: var(--space-4); }
+    .p-8 { padding: var(--space-6); }
+}
+
+/* Small mobile devices */
+@media (max-width: 480px) {
+    /* Even smaller adjustments for very small screens */
+    .enterprise-card {
+        padding: var(--space-3);
+    }
+    
+    .btn-enterprise {
+        padding: var(--space-2) var(--space-3);
+        font-size: 0.875rem;
+    }
+    
+    .page-title {
+        font-size: 1.25rem;
+    }
+    
+    .enterprise-table {
+        font-size: 0.75rem;
+    }
+    
+    .enterprise-table th,
+    .enterprise-table td {
+        padding: var(--space-2);
+    }
+    
+    /* Hide less important table columns on very small screens */
+    .enterprise-table th.hide-mobile,
+    .enterprise-table td.hide-mobile {
+        display: none;
+    }
+}
+
+/* Landscape mode on mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+    .enterprise-content {
+        padding: var(--space-3);
+    }
+    
+    .enterprise-card {
+        padding: var(--space-3);
+    }
+}
+
+/* ===== PRINT STYLES ===== */
+@media print {
+    .enterprise-sidebar,
+    .enterprise-header,
+    .btn-enterprise,
+    .card-actions,
+    .table-toolbar {
+        display: none !important;
+    }
+    
+    .enterprise-main {
+        margin-left: 0;
+    }
+    
+    .enterprise-content {
+        padding: 0;
+    }
+    
+    .enterprise-card {
+        border: 1px solid #000;
+        box-shadow: none;
+        page-break-inside: avoid;
+    }
+    
+    .enterprise-table {
+        font-size: 10pt;
+    }
+}
