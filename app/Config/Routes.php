@@ -63,7 +63,7 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
     // ==================== ATTENDANCE ROUTES (Guru only) ====================
     $routes->group('attendance', ['filter' => 'role:guru'], function ($routes) {
         $routes->get('/', 'AttendanceController::index');
-        $routes->get('students/(:num)', 'AttendanceController::getStudentsByClass/$1');
+        $routes->get('get-students/(:num)', 'AttendanceController::getStudentsByClass/$1');
         $routes->post('store', 'AttendanceController::store');
     });
 
