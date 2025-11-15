@@ -82,7 +82,7 @@ class UserController extends BaseController
             'user'  => $user,
         ];
 
-        return view('user/profile', $data);
+        return view('user/enterprise_profile', $data);
     }
 
     /**

@@ -32,7 +32,7 @@ class AttendanceController extends BaseController
             'subjects' => $subjectModel->getSubjectsByTeacher($teacherId),
         ];
 
-        return view('attendance/index', $data);
+        return view('attendance/enterprise_index', $data);
     }
 
     /**

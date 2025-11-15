@@ -45,21 +45,37 @@ class RecapController extends BaseController
             $filters['date_to'] = $dateTo;
         }
 
-        // Get recap data
-        $recapData = [];
-        if (!empty($filters)) {
-            $recapData = $recordModel->getRecapByStudent($filters);
+        // Get recap data with full details
+        $records = [];
+        $summary = ['H' => 0, 'I' => 0, 'S' => 0, 'A' => 0, 'T' => 0, 'total' => 0];
+
+        if (!empty($filters) || true) { // Show all by default
+            $records = $recordModel->getRecordsWithDetails($filters ?? []);
+
+            // Calculate summary
+            foreach ($records as $record) {
+                $status = $record['status'] ?? '';
+                if (isset($summary[$status])) {
+                    $summary[$status]++;
+                }
+                $summary['total']++;
+            }
         }
 
         $data = [
-            'title'       => 'Rekap Absensi Admin',
+            'title'       => 'Rekap Absensi',
             'classes'     => $classModel->findAll(),
             'subjects'    => $subjectModel->getSubjectsWithTeacher(),
-            'recap_data'  => $recapData,
+            'records'     => $records,
+            'summary'     => $summary,
             'filters'     => $filters,
+            'period'      => $this->request->getGet('period'),
+            'start_date'  => $dateFrom,
+            'end_date'    => $dateTo,
+            'class_id'    => $classId,
         ];
 
-        return view('recap/admin', $data);
+        return view('recap/enterprise_admin', $data);
     }
 
     /**
