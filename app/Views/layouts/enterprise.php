@@ -45,7 +45,7 @@
                                 <span class="nav-icon">📊</span>
                                 <span class="nav-text">Dashboard</span>
                             </a>
-                            <a href="<?= base_url('/attendance') ?>" class="nav-item <?= strpos(current_url(), '/attendance') !== false ? 'active' : '' ?>">
+                            <a href="<?= base_url('/attendance/admin') ?>" class="nav-item <?= strpos(current_url(), '/attendance') !== false ? 'active' : '' ?>">
                                 <span class="nav-icon">✓</span>
                                 <span class="nav-text">Absensi</span>
                             </a>
