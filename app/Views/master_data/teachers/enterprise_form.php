@@ -62,6 +62,49 @@
                     <p class="form-helper-text">Opsional</p>
                 </div>
             </div>
+
+            <?php if (!isset($teacher)): ?>
+            <!-- Account Credentials Section (hanya untuk create) -->
+            <div style="border-top: 1px solid var(--enterprise-border); padding-top: 1.5rem; margin-top: 0.5rem;">
+                <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem;">
+                    <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+                        🔐
+                    </div>
+                    <div>
+                        <h3 style="font-size: 1.125rem; font-weight: 600; margin: 0;">Akun Login</h3>
+                        <p style="font-size: 0.875rem; color: var(--enterprise-text-secondary); margin: 0;">Data untuk login ke sistem</p>
+                    </div>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                    <div class="enterprise-form-group">
+                        <label for="username" class="enterprise-label enterprise-label-required">Username</label>
+                        <input type="text" id="username" name="username" class="enterprise-input"
+                               value="<?= old('username') ?>"
+                               placeholder="Username untuk login"
+                               required>
+                        <p class="form-helper-text">Username digunakan untuk login ke sistem</p>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="enterprise-form-group">
+                            <label for="password" class="enterprise-label enterprise-label-required">Password</label>
+                            <input type="password" id="password" name="password" class="enterprise-input"
+                                   placeholder="Minimal 8 karakter"
+                                   required>
+                            <p class="form-helper-text">Minimal 8 karakter</p>
+                        </div>
+                        <div class="enterprise-form-group">
+                            <label for="password_confirm" class="enterprise-label enterprise-label-required">Konfirmasi Password</label>
+                            <input type="password" id="password_confirm" name="password_confirm" class="enterprise-input"
+                                   placeholder="Ketik ulang password"
+                                   required>
+                            <p class="form-helper-text">Harus sama dengan password</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <?php endif; ?>
             <div style="display: flex; gap: 1rem; justify-content: flex-end; padding-top: 1.5rem; border-top: 1px solid var(--enterprise-border);">
                 <a href="<?= base_url('/master/teachers') ?>" class="btn-enterprise btn-secondary">
                     <span>✕</span><span>Batal</span>

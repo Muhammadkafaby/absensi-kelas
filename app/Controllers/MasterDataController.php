@@ -7,6 +7,7 @@ use App\Models\ClassModel;
 use App\Models\StudentModel;
 use App\Models\TeacherModel;
 use App\Models\SubjectModel;
+use App\Models\UserModel;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class MasterDataController extends BaseController
@@ -569,20 +570,73 @@ class MasterDataController extends BaseController
             return redirect()->to('/dashboard')->with('error', 'Akses ditolak');
         }
 
+        // Validasi password confirmation
+        $password = $this->request->getPost('password');
+        $passwordConfirm = $this->request->getPost('password_confirm');
+
+        if ($password !== $passwordConfirm) {
+            session()->setFlashdata('error', 'Password dan konfirmasi password tidak sama');
+            return redirect()->back()->withInput();
+        }
+
+        // Validasi panjang password
+        if (strlen($password) < 8) {
+            session()->setFlashdata('error', 'Password minimal 8 karakter');
+            return redirect()->back()->withInput();
+        }
+
         $teacherModel = new TeacherModel();
-        $data = [
+        $userModel = new UserModel();
+        $db = \Config\Database::connect();
+
+        // Data guru
+        $teacherData = [
             'name'  => $this->request->getPost('name'),
             'nip'   => $this->request->getPost('nip'),
             'phone' => $this->request->getPost('phone'),
         ];
 
-        if ($teacherModel->insert($data)) {
-            session()->setFlashdata('success', 'Guru berhasil ditambahkan');
-            return redirect()->to('/master/teachers');
-        }
+        // Mulai transaction
+        $db->transStart();
 
-        session()->setFlashdata('error', 'Gagal menambahkan guru: ' . implode(', ', $teacherModel->errors()));
-        return redirect()->back()->withInput();
+        try {
+            // Insert teacher
+            if (!$teacherModel->insert($teacherData)) {
+                throw new \Exception('Gagal menambahkan guru: ' . implode(', ', $teacherModel->errors()));
+            }
+
+            $teacherId = $teacherModel->getInsertID();
+
+            // Data user account
+            $userData = [
+                'username'      => $this->request->getPost('username'),
+                'name'          => $this->request->getPost('name'),
+                'password_hash' => password_hash($password, PASSWORD_DEFAULT),
+                'role'          => 'guru',
+                'teacher_id'    => $teacherId,
+                'email'         => null, // Optional
+            ];
+
+            // Insert user
+            if (!$userModel->insert($userData)) {
+                throw new \Exception('Gagal membuat akun login: ' . implode(', ', $userModel->errors()));
+            }
+
+            // Commit transaction
+            $db->transComplete();
+
+            if ($db->transStatus() === false) {
+                throw new \Exception('Gagal menyimpan data');
+            }
+
+            session()->setFlashdata('success', 'Guru berhasil ditambahkan beserta akun login');
+            return redirect()->to('/master/teachers');
+
+        } catch (\Exception $e) {
+            $db->transRollback();
+            session()->setFlashdata('error', $e->getMessage());
+            return redirect()->back()->withInput();
+        }
     }
 
     public function editTeacher($id)
