@@ -66,7 +66,7 @@ class SemesterModel extends Model
      */
     public function getSemestersWithAcademicYear()
     {
-        return $this->select('semesters.*, academic_years.name as academic_year_name')
+        return $this->select('semesters.*, academic_years.name as year_name')
                     ->join('academic_years', 'academic_years.id = semesters.academic_year_id')
                     ->orderBy('semesters.start_date', 'DESC')
                     ->findAll();
@@ -77,8 +77,10 @@ class SemesterModel extends Model
      */
     public function getByAcademicYear($academicYearId)
     {
-        return $this->where('academic_year_id', $academicYearId)
-                    ->orderBy('start_date', 'ASC')
+        return $this->select('semesters.*, academic_years.name as year_name')
+                    ->join('academic_years', 'academic_years.id = semesters.academic_year_id')
+                    ->where('semesters.academic_year_id', $academicYearId)
+                    ->orderBy('semesters.start_date', 'ASC')
                     ->findAll();
     }
 }

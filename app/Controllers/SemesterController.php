@@ -32,10 +32,11 @@ class SemesterController extends BaseController
         }
 
         $data = [
-            'title'     => 'Semester',
-            'semesters' => $semesters,
-            'years'     => $yearModel->orderBy('start_date', 'DESC')->findAll(),
-            'selectedYear' => $year,
+            'title'          => 'Semester',
+            'semesters'      => $semesters,
+            'years'          => $yearModel->orderBy('start_date', 'DESC')->findAll(),
+            'selectedYear'   => $year,
+            'filter_year_id' => $yearId,
         ];
 
         return view('academic/semesters/enterprise_index', $data);
