@@ -27,6 +27,7 @@
             <?php if (session()->get('role') === 'admin'): ?>
                 <li><a href="<?= base_url('/dashboard') ?>" <?= current_url() == base_url('/dashboard') ? 'class="active"' : '' ?>>Dashboard</a></li>
                 <li><a href="<?= base_url('/master/classes') ?>" <?= strpos(current_url(), '/master') !== false ? 'class="active"' : '' ?>>Master Data</a></li>
+                <li><a href="<?= base_url('/academic/years') ?>" <?= strpos(current_url(), '/academic') !== false ? 'class="active"' : '' ?>>Tahun Ajaran</a></li>
                 <li><a href="<?= base_url('/recap/admin') ?>" <?= strpos(current_url(), '/recap/admin') !== false ? 'class="active"' : '' ?>>Rekap Absensi</a></li>
                 <li><a href="<?= base_url('/activity-logs') ?>" <?= strpos(current_url(), '/activity-logs') !== false ? 'class="active"' : '' ?>>Log Aktivitas</a></li>
                 <li><a href="<?= base_url('/user/profile') ?>" <?= strpos(current_url(), '/user/profile') !== false ? 'class="active"' : '' ?>>Profil</a></li>
