@@ -80,7 +80,9 @@ class AttendanceController extends BaseController
 
         // Check for duplicate session
         $sessionModel = new AttendanceSessionModel();
-        $existingSession = $sessionModel->where([
+
+        // Validasi 1: Cek exact duplicate (kelas + mapel + guru + jam + tanggal yang sama persis)
+        $exactDuplicate = $sessionModel->where([
             'date'       => $date,
             'class_id'   => $classId,
             'subject_id' => $subjectId,
@@ -88,9 +90,33 @@ class AttendanceController extends BaseController
             'lesson_hour' => $lessonHour
         ])->first();
 
-        if ($existingSession) {
+        if ($exactDuplicate) {
             session()->setFlashdata('error', 'Absensi untuk kelas, mapel, dan jam ini sudah pernah dibuat. Silakan edit absensi yang sudah ada.');
             return redirect()->to('/recap/teacher');
+        }
+
+        // Validasi 2: Satu guru tidak boleh mengajar di 2 tempat berbeda pada jam yang sama
+        $teacherConflict = $sessionModel->where([
+            'date'       => $date,
+            'teacher_id' => $teacherId,
+            'lesson_hour' => $lessonHour
+        ])->first();
+
+        if ($teacherConflict) {
+            session()->setFlashdata('error', 'Anda sudah mengajar di kelas/mata pelajaran lain pada jam yang sama hari ini. Satu guru tidak bisa mengajar di 2 tempat pada waktu bersamaan.');
+            return redirect()->to('/attendance');
+        }
+
+        // Validasi 3: Satu kelas tidak boleh belajar 2 mata pelajaran berbeda pada jam yang sama
+        $classConflict = $sessionModel->where([
+            'date'       => $date,
+            'class_id'   => $classId,
+            'lesson_hour' => $lessonHour
+        ])->first();
+
+        if ($classConflict) {
+            session()->setFlashdata('error', 'Kelas ini sudah memiliki jadwal mata pelajaran lain pada jam yang sama hari ini. Satu kelas tidak bisa belajar 2 mapel sekaligus.');
+            return redirect()->to('/attendance');
         }
 
         // Start transaction
@@ -232,7 +258,8 @@ class AttendanceController extends BaseController
         }
 
         // Check for duplicate (exclude current session)
-        $existingSession = $sessionModel->where([
+        // Validasi 1: Cek exact duplicate
+        $exactDuplicate = $sessionModel->where([
             'date'       => $date,
             'class_id'   => $classId,
             'subject_id' => $subjectId,
@@ -240,8 +267,32 @@ class AttendanceController extends BaseController
             'lesson_hour' => $lessonHour
         ])->where('id !=', $sessionId)->first();
 
-        if ($existingSession) {
+        if ($exactDuplicate) {
             session()->setFlashdata('error', 'Sudah ada absensi untuk kelas, mapel, tanggal, dan jam ini');
+            return redirect()->back();
+        }
+
+        // Validasi 2: Satu guru tidak boleh mengajar di 2 tempat berbeda pada jam yang sama
+        $teacherConflict = $sessionModel->where([
+            'date'       => $date,
+            'teacher_id' => $teacherId,
+            'lesson_hour' => $lessonHour
+        ])->where('id !=', $sessionId)->first();
+
+        if ($teacherConflict) {
+            session()->setFlashdata('error', 'Anda sudah mengajar di kelas/mata pelajaran lain pada jam yang sama hari ini. Satu guru tidak bisa mengajar di 2 tempat pada waktu bersamaan.');
+            return redirect()->back();
+        }
+
+        // Validasi 3: Satu kelas tidak boleh belajar 2 mata pelajaran berbeda pada jam yang sama
+        $classConflict = $sessionModel->where([
+            'date'       => $date,
+            'class_id'   => $classId,
+            'lesson_hour' => $lessonHour
+        ])->where('id !=', $sessionId)->first();
+
+        if ($classConflict) {
+            session()->setFlashdata('error', 'Kelas ini sudah memiliki jadwal mata pelajaran lain pada jam yang sama hari ini. Satu kelas tidak bisa belajar 2 mapel sekaligus.');
             return redirect()->back();
         }
 
@@ -352,7 +403,9 @@ class AttendanceController extends BaseController
 
         // Check for duplicate session
         $sessionModel = new AttendanceSessionModel();
-        $existingSession = $sessionModel->where([
+
+        // Validasi 1: Cek exact duplicate (kelas + mapel + guru + jam + tanggal yang sama persis)
+        $exactDuplicate = $sessionModel->where([
             'date'       => $date,
             'class_id'   => $classId,
             'subject_id' => $subjectId,
@@ -360,9 +413,33 @@ class AttendanceController extends BaseController
             'lesson_hour' => $lessonHour
         ])->first();
 
-        if ($existingSession) {
+        if ($exactDuplicate) {
             session()->setFlashdata('error', 'Absensi untuk kombinasi ini sudah ada. Silakan edit absensi yang sudah ada.');
             return redirect()->to('/recap/admin');
+        }
+
+        // Validasi 2: Satu guru tidak boleh mengajar di 2 tempat berbeda pada jam yang sama
+        $teacherConflict = $sessionModel->where([
+            'date'       => $date,
+            'teacher_id' => $teacherId,
+            'lesson_hour' => $lessonHour
+        ])->first();
+
+        if ($teacherConflict) {
+            session()->setFlashdata('error', 'Guru ini sudah mengajar di kelas/mata pelajaran lain pada jam yang sama hari ini. Satu guru tidak bisa mengajar di 2 tempat pada waktu bersamaan.');
+            return redirect()->to('/attendance/admin');
+        }
+
+        // Validasi 3: Satu kelas tidak boleh belajar 2 mata pelajaran berbeda pada jam yang sama
+        $classConflict = $sessionModel->where([
+            'date'       => $date,
+            'class_id'   => $classId,
+            'lesson_hour' => $lessonHour
+        ])->first();
+
+        if ($classConflict) {
+            session()->setFlashdata('error', 'Kelas ini sudah memiliki jadwal mata pelajaran lain pada jam yang sama hari ini. Satu kelas tidak bisa belajar 2 mapel sekaligus.');
+            return redirect()->to('/attendance/admin');
         }
 
         // Start transaction
@@ -497,7 +574,8 @@ class AttendanceController extends BaseController
         }
 
         // Check for duplicate (exclude current session)
-        $existingSession = $sessionModel->where([
+        // Validasi 1: Cek exact duplicate
+        $exactDuplicate = $sessionModel->where([
             'date'       => $date,
             'class_id'   => $classId,
             'subject_id' => $subjectId,
@@ -505,8 +583,32 @@ class AttendanceController extends BaseController
             'lesson_hour' => $lessonHour
         ])->where('id !=', $sessionId)->first();
 
-        if ($existingSession) {
+        if ($exactDuplicate) {
             session()->setFlashdata('error', 'Sudah ada absensi untuk kombinasi ini');
+            return redirect()->back();
+        }
+
+        // Validasi 2: Satu guru tidak boleh mengajar di 2 tempat berbeda pada jam yang sama
+        $teacherConflict = $sessionModel->where([
+            'date'       => $date,
+            'teacher_id' => $teacherId,
+            'lesson_hour' => $lessonHour
+        ])->where('id !=', $sessionId)->first();
+
+        if ($teacherConflict) {
+            session()->setFlashdata('error', 'Guru ini sudah mengajar di kelas/mata pelajaran lain pada jam yang sama hari ini. Satu guru tidak bisa mengajar di 2 tempat pada waktu bersamaan.');
+            return redirect()->back();
+        }
+
+        // Validasi 3: Satu kelas tidak boleh belajar 2 mata pelajaran berbeda pada jam yang sama
+        $classConflict = $sessionModel->where([
+            'date'       => $date,
+            'class_id'   => $classId,
+            'lesson_hour' => $lessonHour
+        ])->where('id !=', $sessionId)->first();
+
+        if ($classConflict) {
+            session()->setFlashdata('error', 'Kelas ini sudah memiliki jadwal mata pelajaran lain pada jam yang sama hari ini. Satu kelas tidak bisa belajar 2 mapel sekaligus.');
             return redirect()->back();
         }
 
