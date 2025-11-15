@@ -18,7 +18,7 @@ class AuthController extends BaseController
             return redirect()->to('/dashboard');
         }
 
-        return view('auth/login');
+        return view('auth/enterprise_login');
     }
 
     /**

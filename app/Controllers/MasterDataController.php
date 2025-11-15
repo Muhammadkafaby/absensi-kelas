@@ -21,11 +21,20 @@ class MasterDataController extends BaseController
             return redirect()->to('/dashboard')->with('error', 'Akses ditolak');
         }
 
+        $classModel = new ClassModel();
+        $studentModel = new StudentModel();
+        $teacherModel = new TeacherModel();
+        $subjectModel = new SubjectModel();
+
         $data = [
             'title' => 'Master Data',
+            'total_classes' => $classModel->countAll(),
+            'total_students' => $studentModel->where('status', 'active')->countAllResults(),
+            'total_teachers' => $teacherModel->countAll(),
+            'total_subjects' => $subjectModel->countAll(),
         ];
 
-        return view('master_data/index', $data);
+        return view('master_data/enterprise_index', $data);
     }
 
     // ==================== CLASSES ====================

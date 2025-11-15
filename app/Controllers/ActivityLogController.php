@@ -59,7 +59,7 @@ class ActivityLogController extends BaseController
             ],
         ];
 
-        return view('activity_logs/index', $data);
+        return view('activity_logs/enterprise_index', $data);
     }
 
     /**
