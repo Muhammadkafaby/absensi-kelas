@@ -2,17 +2,17 @@
 
 <?= $this->section('content') ?>
 
-<div class="card">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-        <h2>Log Aktivitas Sistem</h2>
-        <button type="button" onclick="showClearModal()" class="btn-secondary" style="background: #ef4444; border-color: #ef4444; color: white;">
+<div class="card glass-card fade-in">
+    <div class="flex-between mb-2">
+        <h2 class="gradient-text">📋 Log Aktivitas Sistem</h2>
+        <button type="button" onclick="showClearModal()" class="btn-danger btn-sm">
             🗑️ Hapus Log Lama
         </button>
     </div>
 
     <!-- Filter Section -->
     <form method="get" action="<?= base_url('/activity-logs') ?>">
-        <div class="form-row" style="margin-bottom: 1.5rem;">
+        <div class="form-row mb-2">
             <div class="form-group">
                 <label>Aksi</label>
                 <select name="action" id="filterAction">
@@ -32,8 +32,8 @@
                 <label>Tanggal Sampai</label>
                 <input type="date" name="date_to" value="<?= esc($filters['date_to']) ?>">
             </div>
-            <div class="form-group" style="display: flex; align-items: flex-end;">
-                <button type="submit" class="btn-primary">Filter</button>
+            <div class="form-group flex" style="align-items: flex-end;">
+                <button type="submit" class="btn-primary ripple">Filter</button>
             </div>
         </div>
     </form>

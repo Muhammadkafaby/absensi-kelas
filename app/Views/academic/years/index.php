@@ -2,10 +2,10 @@
 
 <?= $this->section('content') ?>
 
-<div class="card">
+<div class="card glass-card fade-in">
     <div class="card-header">
-        <h2>Tahun Ajaran</h2>
-        <a href="<?= base_url('/academic/years/create') ?>" class="btn-primary">+ Tambah Tahun Ajaran</a>
+        <h2 class="gradient-text">📅 Tahun Ajaran</h2>
+        <a href="<?= base_url('/academic/years/create') ?>" class="btn-primary ripple">+ Tambah Tahun Ajaran</a>
     </div>
 
     <div class="table-container">
@@ -36,11 +36,11 @@
                             <td><?= $year['semester_count'] ?? 0 ?> Semester</td>
                             <td>
                                 <?php if ($year['is_active']): ?>
-                                    <span class="badge badge-success">Aktif</span>
+                                    <span class="badge badge-success pulse-green">Aktif</span>
                                 <?php else: ?>
                                     <a href="<?= base_url('/academic/years/set-active/' . $year['id']) ?>"
-                                       class="badge badge-info"
-                                       style="cursor: pointer; text-decoration: none;"
+                                       class="badge badge-info micro-interact"
+                                       style="cursor: pointer;"
                                        onclick="return confirm('Aktifkan tahun ajaran <?= esc($year['name']) ?>?')">
                                         Aktifkan
                                     </a>

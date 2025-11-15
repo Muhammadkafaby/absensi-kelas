@@ -2,12 +2,12 @@
 
 <?= $this->section('content') ?>
 
-<div class="card">
-    <h2 style="margin-bottom: 1.5rem;">Import Data Siswa dari Excel</h2>
+<div class="card glass-card fade-in">
+    <h2 class="gradient-text mb-2">📥 Import Data Siswa dari Excel</h2>
 
-    <div style="background: #eff6ff; border-left: 4px solid #3b82f6; padding: 1rem; margin-bottom: 1.5rem; border-radius: 0.5rem;">
-        <h3 style="margin-bottom: 0.5rem; color: #1e40af;">📋 Instruksi Import</h3>
-        <ol style="margin: 0.5rem 0; padding-left: 1.5rem; color: #1e3a8a;">
+    <div class="alert alert-info mb-2">
+        <h3 class="mb-1">📋 Instruksi Import</h3>
+        <ol class="pl-2">
             <li>Download template Excel terlebih dahulu</li>
             <li>Isi data siswa sesuai format template (NIS, NISN, Nama, Kelas, JK)</li>
             <li>Kelas harus sesuai dengan kelas yang ada di sistem (contoh: X-1, XI IPA 1, XII IPS 2)</li>
@@ -17,16 +17,16 @@
         </ol>
     </div>
 
-    <div style="margin-bottom: 2rem;">
-        <a href="<?= base_url('/master/students/template') ?>" class="btn-secondary" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+    <div class="mb-2">
+        <a href="<?= base_url('/master/students/template') ?>" class="btn-secondary micro-interact">
             📄 Download Template Excel
         </a>
     </div>
 
     <?php if (session()->getFlashdata('import_errors')): ?>
-        <div style="background: #fef2f2; border-left: 4px solid #ef4444; padding: 1rem; margin-bottom: 1.5rem; border-radius: 0.5rem;">
-            <h3 style="margin-bottom: 0.5rem; color: #991b1b;">⚠️ Error Import</h3>
-            <ul style="margin: 0.5rem 0; padding-left: 1.5rem; color: #7f1d1d;">
+        <div class="alert alert-danger mb-2">
+            <h3 class="mb-1">⚠️ Error Import</h3>
+            <ul class="pl-2">
                 <?php foreach (session()->getFlashdata('import_errors') as $error): ?>
                     <li><?= esc($error) ?></li>
                 <?php endforeach; ?>
@@ -39,32 +39,32 @@
 
         <div class="form-group">
             <label for="excel_file">
-                Pilih File Excel <span style="color: red;">*</span>
+                Pilih File Excel <span class="text-danger">*</span>
             </label>
             <input type="file"
                    id="excel_file"
                    name="excel_file"
                    accept=".xlsx,.xls"
                    required
-                   style="padding: 0.75rem; border: 2px dashed var(--border-color); border-radius: 0.5rem; width: 100%; cursor: pointer;">
-            <small style="color: var(--text-secondary); display: block; margin-top: 0.25rem;">
+                   class="file-input">
+            <small class="text-secondary">
                 Format yang didukung: .xlsx, .xls (maksimal 5MB)
             </small>
         </div>
 
-        <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
-            <button type="submit" class="btn-primary" style="flex: 0 0 auto;">
+        <div class="button-group mt-2">
+            <button type="submit" class="btn-primary ripple">
                 📤 Upload & Import
             </button>
-            <a href="<?= base_url('/master/students') ?>" class="btn-secondary" style="flex: 0 0 auto;">
+            <a href="<?= base_url('/master/students') ?>" class="btn-secondary">
                 ← Kembali
             </a>
         </div>
     </form>
 
-    <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border-color);">
-        <h3 style="margin-bottom: 1rem;">💡 Tips Import</h3>
-        <ul style="color: var(--text-secondary); padding-left: 1.5rem;">
+    <div class="mt-2 pt-2" style="border-top: 1px solid var(--border-color);">
+        <h3 class="mb-1">💡 Tips Import</h3>
+        <ul class="text-secondary pl-2">
             <li>Pastikan tidak ada baris kosong di tengah-tengah data</li>
             <li>NISN bersifat opsional, boleh dikosongkan</li>
             <li>Sistem akan mengabaikan baris yang tidak valid dan melanjutkan import baris berikutnya</li>

@@ -2,9 +2,9 @@
 
 <?= $this->section('content') ?>
 
-<div class="card">
-    <h2 style="margin-bottom: 1.5rem;">
-        <?= isset($semester) ? 'Edit Semester' : 'Tambah Semester' ?>
+<div class="card glass-card fade-in">
+    <h2 class="gradient-text mb-2">
+        <?= isset($semester) ? '✏️ Edit Semester' : '➕ Tambah Semester' ?>
     </h2>
 
     <form action="<?= isset($semester) ? base_url('/academic/semesters/update/' . $semester['id']) : base_url('/academic/semesters/store') ?>"
@@ -13,7 +13,7 @@
 
         <div class="form-group">
             <label for="academic_year_id">
-                Tahun Ajaran <span style="color: red;">*</span>
+                Tahun Ajaran <span class="text-danger">*</span>
             </label>
             <select id="academic_year_id" name="academic_year_id" required>
                 <option value="">Pilih Tahun Ajaran</option>
@@ -28,7 +28,7 @@
 
         <div class="form-group">
             <label for="name">
-                Nama Semester <span style="color: red;">*</span>
+                Nama Semester <span class="text-danger">*</span>
             </label>
             <select id="name" name="name" required>
                 <option value="">Pilih Semester</option>
@@ -44,7 +44,7 @@
         <div class="form-row">
             <div class="form-group">
                 <label for="start_date">
-                    Tanggal Mulai <span style="color: red;">*</span>
+                    Tanggal Mulai <span class="text-danger">*</span>
                 </label>
                 <input type="date"
                        id="start_date"
@@ -55,7 +55,7 @@
 
             <div class="form-group">
                 <label for="end_date">
-                    Tanggal Selesai <span style="color: red;">*</span>
+                    Tanggal Selesai <span class="text-danger">*</span>
                 </label>
                 <input type="date"
                        id="end_date"
@@ -66,7 +66,7 @@
         </div>
 
         <div class="form-group">
-            <label style="display: flex; align-items: center; cursor: pointer;">
+            <label class="flex" style="align-items: center; cursor: pointer;">
                 <input type="checkbox"
                        id="is_active"
                        name="is_active"
@@ -75,13 +75,13 @@
                        style="margin-right: 0.5rem;">
                 <span>Aktifkan semester ini</span>
             </label>
-            <small style="color: var(--text-secondary); display: block; margin-top: 0.25rem;">
+            <small class="text-secondary">
                 Hanya satu semester yang dapat aktif pada satu waktu
             </small>
         </div>
 
-        <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
-            <button type="submit" class="btn-primary">
+        <div class="button-group mt-2">
+            <button type="submit" class="btn-primary ripple">
                 <?= isset($semester) ? 'Update' : 'Simpan' ?>
             </button>
             <a href="<?= base_url('/academic/semesters' . (isset($semester) ? '?year_id=' . $semester['academic_year_id'] : '')) ?>" class="btn-secondary">
