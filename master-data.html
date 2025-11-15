@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master Data - Absensi Kelas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1>Master Data</h1>
+            <div class="user-info">
+                <span id="userName"></span>
+                <span id="userRole" class="role-badge"></span>
+            </div>
+        </div>
+    </header>
+    <nav class="nav" id="nav">
+        <!-- Navigation items will be populated by JS -->
+    </nav>
+    <main class="main">
+        <div class="card">
+            <h2>Siswa</h2>
+            <div class="table-container">
+                <table id="studentsTable">
+                    <thead>
+                        <tr>
+                            <th>NIS</th>
+                            <th>Nama</th>
+                            <th>Kelas</th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentsTableBody">
+                        <!-- Rows will be populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="button-group">
+                <button id="importStudentsBtn" class="btn-secondary">Impor CSV</button>
+                <button id="exportStudentsBtn" class="btn-secondary">Ekspor CSV</button>
+            </div>
+        </div>
+        <div class="card">
+            <h2>Kelas</h2>
+            <div class="table-container">
+                <table id="classesTable">
+                    <thead>
+                        <tr>
+                            <th>Kelas</th>
+                        </tr>
+                    </thead>
+                    <tbody id="classesTableBody">
+                        <!-- Rows will be populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card">
+            <h2>Guru</h2>
+            <div class="table-container">
+                <table id="teachersTable">
+                    <thead>
+                        <tr>
+                            <th>Nama</th>
+                            <th>Mapel</th>
+                            <th>Username/Email</th>
+                            <th>Role</th>
+                        </tr>
+                    </thead>
+                    <tbody id="teachersTableBody">
+                        <!-- Rows will be populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="button-group">
+                <button id="importTeachersBtn" class="btn-secondary">Impor CSV</button>
+                <button id="exportTeachersBtn" class="btn-secondary">Ekspor CSV</button>
+            </div>
+        </div>
+        <div class="card">
+            <h2>Mata Pelajaran</h2>
+            <div class="table-container">
+                <table id="subjectsTable">
+                    <thead>
+                        <tr>
+                            <th>Mata Pelajaran</th>
+                        </tr>
+                    </thead>
+                    <tbody id="subjectsTableBody">
+                        <!-- Rows will be populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="button-group">
+            <button id="syncBtn" class="btn-primary">Sinkronkan</button>
+        </div>
+    </main>
+    <footer class="footer">
+        <p>Kebijakan Kehadiran: Siswa wajib hadir minimal 75% untuk mengikuti ujian. | Kontak: admin@sekolah.sch.id | <a href="#">Bantuan</a></p>
+    </footer>
+    <script src="js/auth.js"></script>
+    <script src="js/master-data.js"></script>
+</body>
+</html>

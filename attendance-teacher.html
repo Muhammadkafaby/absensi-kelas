@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Input Absensi - Absensi Kelas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1>Input Absensi</h1>
+            <div class="user-info">
+                <span id="userName"></span>
+                <span id="userRole" class="role-badge"></span>
+            </div>
+        </div>
+    </header>
+    <nav class="nav" id="nav">
+        <!-- Navigation items will be populated by JS -->
+    </nav>
+    <main class="main">
+        <div class="card controls-card">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="classSelect">Kelas</label>
+                    <select id="classSelect">
+                        <option value="">Pilih Kelas</option>
+                        <option value="X-1">X-1</option>
+                        <option value="X-2">X-2</option>
+                        <option value="X-3">X-3</option>
+                        <option value="X-4">X-4</option>
+                        <option value="XI-1">XI-1</option>
+                        <option value="XI-2">XI-2</option>
+                        <option value="XI-3">XI-3</option>
+                        <option value="XI-4">XI-4</option>
+                        <option value="XII-1">XII-1</option>
+                        <option value="XII-2">XII-2</option>
+                        <option value="XII-3">XII-3</option>
+                        <option value="XII-4">XII-4</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="dateInput">Tanggal</label>
+                    <input type="date" id="dateInput">
+                </div>
+                <div class="form-group">
+                    <label for="hourSelect">Jam ke-</label>
+                    <select id="hourSelect">
+                        <option value="">Pilih Jam</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="subjectInput">Mata Pelajaran</label>
+                    <input type="text" id="subjectInput" value="">
+                </div>
+            </div>
+            <div class="button-group">
+                <button id="allPresentBtn" class="btn-secondary">✓ Semua Hadir</button>
+                <button id="resetBtn" class="btn-secondary">↺ Reset</button>
+            </div>
+        </div>
+        <div class="card">
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Cari nama/NIS…">
+            </div>
+            <div class="table-container">
+                <table id="attendanceTable">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>NIS</th>
+                            <th>Nama Siswa</th>
+                            <th>Kehadiran</th>
+                            <th>Catatan</th>
+                        </tr>
+                    </thead>
+                    <tbody id="attendanceTableBody">
+                        <!-- Rows will be populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="button-group">
+                <button id="saveBtn" class="btn-primary">SIMPAN ABSENSI</button>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <p>Kebijakan Kehadiran: Siswa wajib hadir minimal 75% untuk mengikuti ujian. | Kontak: admin@sekolah.sch.id | <a href="#">Bantuan</a></p>
+    </footer>
+    <script src="js/auth.js"></script>
+    <script src="js/attendance-teacher.js"></script>
+</body>
+</html>

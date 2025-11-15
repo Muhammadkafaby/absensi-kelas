@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Absensi Kelas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1>Absensi Kelas</h1>
+            <div class="user-info">
+                <span id="userName"></span>
+                <span id="userRole" class="role-badge"></span>
+            </div>
+        </div>
+    </header>
+    <nav class="nav" id="nav">
+        <!-- Navigation items will be populated by JS -->
+    </nav>
+    <main class="main">
+        <div class="dashboard-cards" id="dashboardCards">
+            <!-- Cards will be populated by JS -->
+        </div>
+        <div id="adminAbsentSection" style="display: none;">
+            <div class="card">
+                <h2>Alfa Hari Ini</h2>
+                <div class="table-container">
+                    <table id="dashboardAbsentTable">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>NIS</th>
+                                <th>Nama</th>
+                                <th>Kelas</th>
+                                <th>Mapel</th>
+                                <th>Jam</th>
+                                <th>Guru</th>
+                                <th>Catatan</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dashboardAbsentTableBody">
+                            <!-- Rows will be populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <p>Kebijakan Kehadiran: Siswa wajib hadir minimal 75% untuk mengikuti ujian. | Kontak: admin@sekolah.sch.id | <a href="#">Bantuan</a></p>
+    </footer>
+    <script src="js/auth.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

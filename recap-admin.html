@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rekap Harian - Absensi Kelas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1>Rekap Harian</h1>
+            <div class="user-info">
+                <span id="userName"></span>
+                <span id="userRole" class="role-badge"></span>
+            </div>
+        </div>
+    </header>
+    <nav class="nav" id="nav">
+        <!-- Navigation items will be populated by JS -->
+    </nav>
+    <main class="main">
+        <div class="metrics-cards">
+            <div class="metric-card">
+                <h3>Total Hadir</h3>
+                <span id="totalPresent">0</span>
+            </div>
+            <div class="metric-card">
+                <h3>Alfa</h3>
+                <span id="totalAbsent">0</span>
+            </div>
+            <div class="metric-card">
+                <h3>Izin</h3>
+                <span id="totalPermit">0</span>
+            </div>
+            <div class="metric-card">
+                <h3>Sakit</h3>
+                <span id="totalSick">0</span>
+            </div>
+            <div class="metric-card">
+                <h3>% Hadir Hari Ini</h3>
+                <span id="attendancePercent">0%</span>
+            </div>
+        </div>
+        <div class="card">
+            <h2>Alfa Hari Ini</h2>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="absentDateFilter">Tanggal</label>
+                    <input type="date" id="absentDateFilter">
+                </div>
+            </div>
+            <div class="table-container">
+                <table id="absentTable">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>NIS</th>
+                            <th>Nama</th>
+                            <th>Kelas</th>
+                            <th>Mapel</th>
+                            <th>Jam</th>
+                            <th>Guru</th>
+                            <th>Catatan</th>
+                        </tr>
+                    </thead>
+                    <tbody id="absentTableBody">
+                        <!-- Rows will be populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card">
+            <h2>Rekap per Kelas</h2>
+            <div class="table-container">
+                <table id="classRecapTable">
+                    <thead>
+                        <tr>
+                            <th>Kelas</th>
+                            <th>H</th>
+                            <th>A</th>
+                            <th>S</th>
+                            <th>I</th>
+                            <th>% Hadir</th>
+                        </tr>
+                    </thead>
+                    <tbody id="classRecapTableBody">
+                        <!-- Rows will be populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="button-group">
+                <button id="downloadCsvBtn" class="btn-secondary">Unduh CSV Harian</button>
+                <button id="printPdfBtn" class="btn-secondary">Cetak PDF</button>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <p>Kebijakan Kehadiran: Siswa wajib hadir minimal 75% untuk mengikuti ujian. | Kontak: admin@sekolah.sch.id | <a href="#">Bantuan</a></p>
+    </footer>
+    <script src="js/auth.js"></script>
+    <script src="js/recap-admin.js"></script>
+</body>
+</html>

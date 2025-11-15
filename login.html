@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Absensi Kelas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <h1>Absensi Kelas</h1>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Email/Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn-primary">Masuk</button>
+                <div style="text-align: center; margin-top: 1rem;">
+                    <a href="#" id="registerLink" style="color: var(--primary-color); text-decoration: none; font-size: 0.9rem;">Buat Akun Baru</a>
+                </div>
+            </form>
+
+
+            <div id="errorMessage" class="error-message"></div>
+
+            <!-- Registration Form (hidden by default) -->
+            <div id="registerForm" style="display: none; margin-top: 2rem;">
+                <h3 style="text-align: center; color: var(--text-primary); margin-bottom: 1rem;">Buat Akun Baru</h3>
+                <form id="registrationForm">
+                    <div class="form-group">
+                        <label for="regNama">Nama Lengkap</label>
+                        <input type="text" id="regNama" name="nama" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regUsername">Username</label>
+                        <input type="text" id="regUsername" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regEmail">Email</label>
+                        <input type="email" id="regEmail" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regPassword">Password</label>
+                        <input type="password" id="regPassword" name="password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regRole">Role</label>
+                        <select id="regRole" name="role" required onchange="toggleMapelField()">
+                            <option value="guru">Guru</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="mapelField">
+                        <label for="regMapel">Mata Pelajaran</label>
+                        <select id="regMapel" name="mapel">
+                            <option value="">Pilih Mata Pelajaran</option>
+                            <option value="Matematika">Matematika</option>
+                            <option value="Bahasa Indonesia">Bahasa Indonesia</option>
+                            <option value="Bahasa Inggris">Bahasa Inggris</option>
+                            <option value="IPA">IPA</option>
+                            <option value="IPS">IPS</option>
+                            <option value="PKN">PKN</option>
+                            <option value="Agama">Agama</option>
+                            <option value="Seni Budaya">Seni Budaya</option>
+                            <option value="Penjas">Penjas</option>
+                            <option value="Bahasa Daerah">Bahasa Daerah</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-primary">Daftar</button>
+                    <button type="button" id="cancelRegister" class="btn-secondary" style="margin-left: 0.5rem;">Batal</button>
+                </form>
+                <div id="registerErrorMessage" class="error-message"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (!username || !password) {
+                document.getElementById('errorMessage').textContent = 'Harap isi username dan password';
+                return;
+            }
+
+            // Special handling for default accounts
+            if (username === 'admin' && password === '123') {
+                const mockUser = {
+                    nama: 'Administrator',
+                    role: 'admin',
+                    mapel: ''
+                };
+                const mockToken = 'default-admin-token';
+
+                localStorage.setItem('token', mockToken);
+                localStorage.setItem('user', JSON.stringify(mockUser));
+
+                auth.showNotification('Login berhasil!', 'success');
+                window.location.href = 'dashboard.html';
+            } else if (username === 'guru' && password === '123') {
+                const mockUser = {
+                    nama: 'Guru Default',
+                    role: 'guru',
+                    mapel: 'Matematika'
+                };
+                const mockToken = 'default-guru-token';
+
+                localStorage.setItem('token', mockToken);
+                localStorage.setItem('user', JSON.stringify(mockUser));
+
+                auth.showNotification('Login berhasil!', 'success');
+                window.location.href = 'dashboard.html';
+            } else {
+                // Use actual authentication for other users
+                await auth.login(username, password);
+            }
+        });
+
+        // Handle register link click
+        document.getElementById('registerLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('registerForm').style.display = 'block';
+            document.getElementById('loginForm').style.display = 'none';
+            toggleMapelField(); // Initialize field visibility
+        });
+
+        // Function to toggle mapel field based on role
+        function toggleMapelField() {
+            const role = document.getElementById('regRole').value;
+            const mapelField = document.getElementById('mapelField');
+            const mapelSelect = document.getElementById('regMapel');
+
+            if (role === 'admin') {
+                mapelField.style.display = 'none';
+                mapelSelect.required = false;
+                mapelSelect.value = '';
+            } else {
+                mapelField.style.display = 'block';
+                mapelSelect.required = true;
+            }
+        }
+
+        // Handle cancel register
+        document.getElementById('cancelRegister').addEventListener('click', function() {
+            document.getElementById('registerForm').style.display = 'none';
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('registrationForm').reset();
+            document.getElementById('registerErrorMessage').textContent = '';
+            toggleMapelField(); // Reset field visibility
+        });
+
+        // Handle registration form submission
+        document.getElementById('registrationForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const nama = document.getElementById('regNama').value;
+            const username = document.getElementById('regUsername').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            const role = document.getElementById('regRole').value;
+            const mapel = document.getElementById('regMapel').value;
+
+            if (!nama || !username || !email || !password || !role) {
+                document.getElementById('registerErrorMessage').textContent = 'Harap isi semua field';
+                return;
+            }
+
+            if (role === 'guru' && !mapel) {
+                document.getElementById('registerErrorMessage').textContent = 'Harap pilih mata pelajaran untuk guru';
+                return;
+            }
+
+            try {
+                const response = await fetch(`${CONFIG.API_BASE_URL}?mode=register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ nama, username, email, password, mapel: role === 'guru' ? mapel : '', role })
+                });
+
+                const data = await response.json();
+
+                if (data.ok) {
+                    auth.showNotification('Pendaftaran berhasil! Silakan login dengan akun Anda.', 'success');
+                    document.getElementById('registerForm').style.display = 'none';
+                    document.getElementById('loginForm').style.display = 'block';
+                    document.getElementById('registrationForm').reset();
+                    toggleMapelField(); // Reset field visibility
+                } else {
+                    document.getElementById('registerErrorMessage').textContent = data.message || 'Pendaftaran gagal';
+                }
+            } catch (error) {
+                console.error('Registration error:', error);
+                document.getElementById('registerErrorMessage').textContent = 'Terjadi kesalahan saat mendaftar';
+            }
+        });
+    </script>
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+</html>
