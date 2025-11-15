@@ -105,6 +105,52 @@ class AttendanceRecordModel extends Model
     }
 
     /**
+     * Get records with full details untuk recap admin
+     */
+    public function getRecordsWithDetails($filters = [])
+    {
+        $builder = $this->db->table('attendance_records')
+                            ->select('attendance_records.*,
+                                     students.nis,
+                                     students.name as student_name,
+                                     classes.name as class_name,
+                                     subjects.name as subject_name,
+                                     subjects.code as subject_code,
+                                     teachers.name as teacher_name,
+                                     attendance_sessions.date,
+                                     attendance_sessions.lesson_hour')
+                            ->join('students', 'students.id = attendance_records.student_id')
+                            ->join('classes', 'classes.id = students.class_id')
+                            ->join('attendance_sessions', 'attendance_sessions.id = attendance_records.attendance_session_id')
+                            ->join('subjects', 'subjects.id = attendance_sessions.subject_id')
+                            ->join('teachers', 'teachers.id = attendance_sessions.teacher_id');
+
+        // Apply filters
+        if (isset($filters['class_id'])) {
+            $builder->where('students.class_id', $filters['class_id']);
+        }
+
+        if (isset($filters['subject_id'])) {
+            $builder->where('attendance_sessions.subject_id', $filters['subject_id']);
+        }
+
+        if (isset($filters['date_from'])) {
+            $builder->where('attendance_sessions.date >=', $filters['date_from']);
+        }
+
+        if (isset($filters['date_to'])) {
+            $builder->where('attendance_sessions.date <=', $filters['date_to']);
+        }
+
+        $builder->orderBy('attendance_sessions.date', 'DESC')
+               ->orderBy('attendance_sessions.lesson_hour', 'ASC')
+               ->orderBy('classes.name', 'ASC')
+               ->orderBy('students.name', 'ASC');
+
+        return $builder->get()->getResultArray();
+    }
+
+    /**
      * Get siswa yang alpa hari ini
      */
     public function getTodayAlpaStudents()
