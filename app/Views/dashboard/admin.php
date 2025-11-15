@@ -96,7 +96,7 @@ const colors = {
     I: '#06b6d4',
     S: '#f59e0b',
     A: '#ef4444',
-    T: '#22c55e'
+    T: '#8b5cf6'
 };
 
 // 1. Pie Chart
@@ -138,8 +138,8 @@ new Chart(document.getElementById('trendLineChart'), {
         datasets: [{
             label: '% Kehadiran',
             data: trendData.map(d => d.total > 0 ? ((d.hadir / d.total) * 100).toFixed(1) : 0),
-            borderColor: '#10b981',
-            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+            borderColor: '#6366f1',
+            backgroundColor: 'rgba(99, 102, 241, 0.1)',
             tension: 0.4,
             fill: true,
             pointRadius: 4
