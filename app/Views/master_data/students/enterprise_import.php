@@ -88,11 +88,24 @@
     <form action="<?= base_url('/master/students/import/process') ?>" method="POST" enctype="multipart/form-data">
         <?= csrf_field() ?>
 
+        <?php if (session()->getFlashdata('import_errors')): ?>
+            <div class="enterprise-alert alert-warning mb-4">
+                <div style="font-weight: 600; margin-bottom: 0.5rem;">⚠️ Beberapa data gagal diimport:</div>
+                <div style="max-height: 300px; overflow-y: auto;">
+                    <ul style="margin: 0; padding-left: 1.5rem; font-size: 0.875rem;">
+                        <?php foreach (session()->getFlashdata('import_errors') as $error): ?>
+                            <li><?= esc($error) ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            </div>
+        <?php endif; ?>
+
         <div style="display: flex; flex-direction: column; gap: 1.5rem;">
             <!-- File Input -->
             <div class="enterprise-form-group">
-                <label for="file" class="enterprise-label enterprise-label-required">Pilih File Excel</label>
-                <input type="file" id="file" name="file" class="enterprise-input" accept=".xlsx,.xls" required>
+                <label for="excel_file" class="enterprise-label enterprise-label-required">Pilih File Excel</label>
+                <input type="file" id="excel_file" name="excel_file" class="enterprise-input" accept=".xlsx,.xls" required>
                 <p class="form-helper-text">Format: .xlsx atau .xls (Max: 2MB)</p>
             </div>
 
@@ -102,7 +115,7 @@
                     <div style="font-weight: 600; margin-bottom: 0.25rem; color: var(--enterprise-primary-600);">Template Excel</div>
                     <div style="font-size: 0.875rem; color: var(--enterprise-text-secondary);">Download template untuk memudahkan import</div>
                 </div>
-                <a href="<?= base_url('/master/students/import/template') ?>" class="btn-enterprise btn-secondary btn-sm">
+                <a href="<?= base_url('/master/students/template') ?>" class="btn-enterprise btn-secondary btn-sm">
                     <span>📥</span>
                     <span>Download</span>
                 </a>

@@ -89,6 +89,7 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
         $routes->get('students/import', 'MasterDataController::importStudentsForm');
         $routes->post('students/import/process', 'MasterDataController::importStudentsProcess');
         $routes->get('students/template', 'MasterDataController::downloadStudentTemplate');
+        $routes->get('students/export', 'MasterDataController::exportStudents');
 
         // Teachers
         $routes->get('teachers', 'MasterDataController::teachers');
