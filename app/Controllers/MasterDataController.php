@@ -51,7 +51,7 @@ class MasterDataController extends BaseController
             'classes' => $classModel->getClassesWithStudentCount(),
         ];
 
-        return view('master_data/classes/index', $data);
+        return view('master_data/classes/enterprise_index', $data);
     }
 
     public function createClass()
@@ -161,7 +161,7 @@ class MasterDataController extends BaseController
             'students' => $studentModel->getStudentsWithClass(),
         ];
 
-        return view('master_data/students/index', $data);
+        return view('master_data/students/enterprise_index', $data);
     }
 
     public function createStudent()
@@ -465,7 +465,7 @@ class MasterDataController extends BaseController
             'teachers' => $teacherModel->getTeachersWithSubjectCount(),
         ];
 
-        return view('master_data/teachers/index', $data);
+        return view('master_data/teachers/enterprise_index', $data);
     }
 
     public function createTeacher()
@@ -575,7 +575,7 @@ class MasterDataController extends BaseController
             'subjects' => $subjectModel->getSubjectsWithTeacher(),
         ];
 
-        return view('master_data/subjects/index', $data);
+        return view('master_data/subjects/enterprise_index', $data);
     }
 
     public function createSubject()

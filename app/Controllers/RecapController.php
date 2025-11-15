@@ -134,6 +134,6 @@ class RecapController extends BaseController
             'filters'     => $filters,
         ];
 
-        return view('recap/teacher', $data);
+        return view('recap/enterprise_teacher', $data);
     }
 }
