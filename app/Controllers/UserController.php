@@ -8,15 +8,12 @@ use App\Models\UserModel;
 class UserController extends BaseController
 {
     /**
-     * Show change password form
+     * Show change password form (redirect to profile page)
      */
     public function changePassword()
     {
-        $data = [
-            'title' => 'Ganti Password',
-        ];
-
-        return view('user/change_password', $data);
+        // Change password form is now integrated in the profile page
+        return redirect()->to('/user/profile')->with('info', 'Formulir ganti password tersedia di halaman profil');
     }
 
     /**
