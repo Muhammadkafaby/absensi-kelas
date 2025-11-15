@@ -115,5 +115,8 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
 
         // Teacher recap (Guru only)
         $routes->get('teacher', 'RecapController::teacherRecap', ['filter' => 'role:guru']);
+
+        // Export recap to Excel (Admin only)
+        $routes->get('export-excel', 'ExportController::exportRecapExcel', ['filter' => 'role:admin']);
     });
 });
