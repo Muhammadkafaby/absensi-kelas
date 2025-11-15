@@ -33,6 +33,12 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
         $routes->get('students/excel', 'ExportController::exportStudentsExcel');
     });
 
+    // ==================== ACTIVITY LOGS (Admin only) ====================
+    $routes->group('activity-logs', ['filter' => 'role:admin'], function ($routes) {
+        $routes->get('/', 'ActivityLogController::index');
+        $routes->post('clear', 'ActivityLogController::clearOld');
+    });
+
     // ==================== ATTENDANCE ROUTES (Guru only) ====================
     $routes->group('attendance', ['filter' => 'role:guru'], function ($routes) {
         $routes->get('/', 'AttendanceController::index');
@@ -59,6 +65,9 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
         $routes->get('students/edit/(:num)', 'MasterDataController::editStudent/$1');
         $routes->post('students/update/(:num)', 'MasterDataController::updateStudent/$1');
         $routes->get('students/delete/(:num)', 'MasterDataController::deleteStudent/$1');
+        $routes->get('students/import', 'MasterDataController::importStudentsForm');
+        $routes->post('students/import/process', 'MasterDataController::importStudentsProcess');
+        $routes->get('students/template', 'MasterDataController::downloadStudentTemplate');
 
         // Teachers
         $routes->get('teachers', 'MasterDataController::teachers');
