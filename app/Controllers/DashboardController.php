@@ -101,7 +101,7 @@ class DashboardController extends BaseController
 
         $data['chart_trend_data'] = $trendData;
 
-        return view('dashboard/admin', $data);
+        return view('dashboard/enterprise_admin', $data);
     }
 
     /**
@@ -164,6 +164,6 @@ class DashboardController extends BaseController
 
         $data['chart_trend_data'] = $teacherTrend;
 
-        return view('dashboard/guru', $data);
+        return view('dashboard/enterprise_guru', $data);
     }
 }
