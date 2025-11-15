@@ -24,7 +24,7 @@ class AcademicYearController extends BaseController
             'years' => $yearModel->getWithSemesterCount(),
         ];
 
-        return view('academic/years/index', $data);
+        return view('academic/years/enterprise_index', $data);
     }
 
     /**

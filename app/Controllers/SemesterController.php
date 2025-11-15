@@ -38,7 +38,7 @@ class SemesterController extends BaseController
             'selectedYear' => $year,
         ];
 
-        return view('academic/semesters/index', $data);
+        return view('academic/semesters/enterprise_index', $data);
     }
 
     /**
