@@ -153,6 +153,153 @@ class ExportController extends BaseController
     }
 
     /**
+     * Export rekap absensi untuk Guru ke Excel
+     */
+    public function exportTeacherRecapExcel()
+    {
+        // Pastikan yang akses adalah guru
+        if (session()->get('role') !== 'guru') {
+            session()->setFlashdata('error', 'Akses ditolak');
+            return redirect()->to('/dashboard');
+        }
+
+        $teacherId = session()->get('teacher_id');
+        $recordModel = new AttendanceRecordModel();
+
+        // Get filter parameters
+        $classId = $this->request->getGet('class_id');
+        $subjectId = $this->request->getGet('subject_id');
+        $dateFrom = $this->request->getGet('date_from');
+        $dateTo = $this->request->getGet('date_to');
+
+        // Build filters (ALWAYS include teacher_id)
+        $filters = ['teacher_id' => $teacherId];
+        if ($classId) $filters['class_id'] = $classId;
+        if ($subjectId) $filters['subject_id'] = $subjectId;
+        if ($dateFrom) $filters['date_from'] = $dateFrom;
+        if ($dateTo) $filters['date_to'] = $dateTo;
+
+        // Get recap data
+        $recapData = $recordModel->getRecapByStudent($filters);
+
+        if (empty($recapData)) {
+            session()->setFlashdata('error', 'Tidak ada data untuk diexport');
+            return redirect()->back();
+        }
+
+        // Create new Spreadsheet
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Set document properties
+        $spreadsheet->getProperties()
+            ->setCreator('SMA NU Kaplongan')
+            ->setTitle('Rekap Absensi Guru')
+            ->setSubject('Rekap Absensi Siswa')
+            ->setDescription('Rekap absensi siswa oleh guru');
+
+        // Header
+        $sheet->setCellValue('A1', 'REKAP ABSENSI SISWA');
+        $sheet->setCellValue('A2', 'SMA NU KAPLONGAN');
+        $sheet->setCellValue('A3', 'Guru: ' . session()->get('name'));
+
+        // Filter info
+        $row = 5;
+        if ($dateFrom || $dateTo) {
+            $period = 'Periode: ';
+            if ($dateFrom) $period .= date('d M Y', strtotime($dateFrom));
+            $period .= ' s/d ';
+            if ($dateTo) $period .= date('d M Y', strtotime($dateTo));
+            $sheet->setCellValue('A' . $row, $period);
+            $row++;
+        }
+
+        // Table header
+        $row += 1;
+        $headers = ['No', 'NIS', 'Nama', 'Kelas', 'H', 'I', 'S', 'A', 'T', 'Total', '%Hadir'];
+        $col = 'A';
+        foreach ($headers as $header) {
+            $sheet->setCellValue($col . $row, $header);
+            $col++;
+        }
+
+        // Style header
+        $sheet->getStyle('A' . $row . ':K' . $row)->applyFromArray([
+            'font' => ['bold' => true, 'color' => ['rgb' => 'FFFFFF']],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '10B981']
+            ],
+            'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
+            'borders' => [
+                'allBorders' => ['borderStyle' => Border::BORDER_THIN]
+            ]
+        ]);
+
+        // Data rows
+        $row++;
+        $no = 1;
+        foreach ($recapData as $data) {
+            $persen = ($data['total_pertemuan'] > 0) ? round(($data['hadir'] / $data['total_pertemuan']) * 100, 1) : 0;
+
+            $sheet->setCellValue('A' . $row, $no++);
+            $sheet->setCellValue('B' . $row, $data['nis']);
+            $sheet->setCellValue('C' . $row, $data['student_name']);
+            $sheet->setCellValue('D' . $row, $data['class_name']);
+            $sheet->setCellValue('E' . $row, $data['hadir']);
+            $sheet->setCellValue('F' . $row, $data['izin']);
+            $sheet->setCellValue('G' . $row, $data['sakit']);
+            $sheet->setCellValue('H' . $row, $data['alpa']);
+            $sheet->setCellValue('I' . $row, $data['terlambat']);
+            $sheet->setCellValue('J' . $row, $data['total_pertemuan']);
+            $sheet->setCellValue('K' . $row, $persen . '%');
+
+            // Color coding for attendance percentage
+            $color = $persen >= 75 ? '10B981' : ($persen >= 50 ? 'F59E0B' : 'EF4444');
+            $sheet->getStyle('K' . $row)->getFill()
+                ->setFillType(Fill::FILL_SOLID)
+                ->getStartColor()->setRGB($color);
+
+            $row++;
+        }
+
+        // Style data rows
+        $lastRow = $row - 1;
+        $headerRow = $lastRow - count($recapData);
+        $sheet->getStyle('A' . $headerRow . ':K' . $lastRow)->applyFromArray([
+            'borders' => [
+                'allBorders' => ['borderStyle' => Border::BORDER_THIN, 'color' => ['rgb' => 'E5E7EB']]
+            ]
+        ]);
+
+        // Auto-size columns
+        foreach (range('A', 'K') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+
+        // Merge title cells
+        $sheet->mergeCells('A1:K1');
+        $sheet->mergeCells('A2:K2');
+        $sheet->mergeCells('A3:K3');
+        $sheet->getStyle('A1:A3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A1')->getFont()->setSize(16)->setBold(true);
+        $sheet->getStyle('A2')->getFont()->setSize(12);
+        $sheet->getStyle('A3')->getFont()->setSize(10)->setItalic(true);
+
+        // Generate filename
+        $filename = 'Rekap_Absensi_Guru_' . date('Y-m-d_His') . '.xlsx';
+
+        // Set headers for download
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
+        exit;
+    }
+
+    /**
      * Export daftar siswa ke Excel
      */
     public function exportStudentsExcel()

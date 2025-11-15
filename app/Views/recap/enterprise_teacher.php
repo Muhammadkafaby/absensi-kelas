@@ -14,9 +14,9 @@
                 <p style="color: var(--enterprise-text-secondary); margin: 0;">Laporan absensi kelas yang Anda ampu</p>
             </div>
         </div>
-        <button onclick="exportPDF()" class="btn-enterprise btn-primary">
+        <button onclick="exportExcel()" class="btn-enterprise btn-primary">
             <span>📥</span>
-            <span>Export PDF</span>
+            <span>Export Excel</span>
         </button>
     </div>
 </div>
@@ -27,7 +27,7 @@
         <h2 class="card-title">Filter Laporan</h2>
     </div>
 
-    <form method="GET" class="form-row">
+    <form method="GET" id="filterForm" class="form-row">
         <div class="enterprise-form-group">
             <label class="enterprise-label">Mata Pelajaran</label>
             <select name="subject_id" class="enterprise-select" onchange="this.form.submit()">
@@ -176,8 +176,22 @@
 
 <?= $this->section('extra_js') ?>
 <script>
-function exportPDF() {
-    if (window.Toast) Toast.info('Fitur export PDF akan segera tersedia');
+function exportExcel() {
+    // Get current filter values
+    const form = document.getElementById('filterForm');
+    const formData = new FormData(form);
+
+    // Build query string
+    const params = new URLSearchParams();
+    for (const [key, value] of formData.entries()) {
+        if (value) params.append(key, value);
+    }
+
+    // Add teacher_id from session (will be added by controller)
+    const exportUrl = '<?= base_url('/recap/teacher/export-excel') ?>' + (params.toString() ? '?' + params.toString() : '');
+
+    // Open in new window for download
+    window.location.href = exportUrl;
 }
 </script>
 <?= $this->endSection() ?>

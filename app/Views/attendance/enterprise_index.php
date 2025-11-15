@@ -226,7 +226,7 @@ function renderStudentTable() {
             <td><strong>${student.nis}</strong></td>
             <td>${student.name}</td>
             <td>
-                <select name="status[${student.id}]" class="enterprise-select" onchange="updateCounts()" required style="font-size: 0.875rem; padding: 0.5rem;">
+                <select name="attendance[${student.id}]" class="enterprise-select" onchange="updateCounts()" required style="font-size: 0.875rem; padding: 0.5rem;">
                     <option value="">Pilih Status</option>
                     <option value="H" selected>✓ Hadir</option>
                     <option value="I">📋 Izin</option>
@@ -246,7 +246,7 @@ function renderStudentTable() {
 }
 
 function updateCounts() {
-    const selects = document.querySelectorAll('select[name^="status"]');
+    const selects = document.querySelectorAll('select[name^="attendance"]');
     let counts = { H: 0, I: 0, S: 0, A: 0, T: 0, total: 0, filled: 0 };
 
     selects.forEach(select => {
@@ -304,7 +304,7 @@ function updateClassInfo() {
 
 // Quick actions
 document.getElementById('allPresentBtn').addEventListener('click', function() {
-    document.querySelectorAll('select[name^="status"]').forEach(select => {
+    document.querySelectorAll('select[name^="attendance"]').forEach(select => {
         select.value = 'H';
     });
     updateCounts();
@@ -313,7 +313,7 @@ document.getElementById('allPresentBtn').addEventListener('click', function() {
 
 document.getElementById('resetBtn').addEventListener('click', function() {
     if (confirm('Reset semua status kehadiran?')) {
-        document.querySelectorAll('select[name^="status"]').forEach(select => {
+        document.querySelectorAll('select[name^="attendance"]').forEach(select => {
             select.value = 'H';
         });
         document.querySelectorAll('input[name^="note"]').forEach(input => {
@@ -325,7 +325,7 @@ document.getElementById('resetBtn').addEventListener('click', function() {
 });
 
 function setAllStatus(status) {
-    document.querySelectorAll('select[name^="status"]').forEach(select => {
+    document.querySelectorAll('select[name^="attendance"]').forEach(select => {
         select.value = status;
     });
     updateCounts();
@@ -349,7 +349,7 @@ document.getElementById('searchInput').addEventListener('input', function() {
 
 // Form submission
 document.getElementById('attendanceForm').addEventListener('submit', function(e) {
-    const selects = document.querySelectorAll('select[name^="status"]');
+    const selects = document.querySelectorAll('select[name^="attendance"]');
     let allFilled = true;
 
     selects.forEach(select => {
