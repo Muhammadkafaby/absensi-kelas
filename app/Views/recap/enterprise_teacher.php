@@ -76,11 +76,30 @@
 </div>
 
 <!-- Summary Stats -->
+<?php
+// Group records by session_id
+$sessions = [];
+foreach ($records ?? [] as $record) {
+    $sessionId = $record['session_id'] ?? $record['attendance_session_id'];
+    if (!isset($sessions[$sessionId])) {
+        $sessions[$sessionId] = [
+            'id' => $sessionId,
+            'date' => $record['date'],
+            'class_name' => $record['class_name'],
+            'subject_name' => $record['subject_name'],
+            'lesson_hour' => $record['lesson_hour'] ?? '-',
+            'count' => 0
+        ];
+    }
+    $sessions[$sessionId]['count']++;
+}
+?>
+
 <div class="stats-grid mb-6">
     <div class="metric-card">
         <div class="metric-icon">📝</div>
         <div class="metric-label">Total Sesi</div>
-        <div class="metric-value"><?= count(array_unique(array_column($records ?? [], 'session_id'))) ?></div>
+        <div class="metric-value"><?= count($sessions) ?></div>
     </div>
 
     <div class="metric-card">
@@ -102,67 +121,84 @@
     </div>
 </div>
 
-<!-- Data Table -->
+<!-- Sessions Table -->
 <div class="enterprise-card">
     <div class="card-header">
-        <h2 class="card-title">Detail Rekap Absensi</h2>
-        <span class="enterprise-badge badge-neutral"><?= count($records ?? []) ?> Records</span>
+        <h2 class="card-title">Sesi Absensi</h2>
+        <span class="enterprise-badge badge-neutral"><?= count($sessions) ?> Sesi</span>
     </div>
 
     <div class="enterprise-table-wrapper" style="border: none; background: transparent;">
         <div class="table-toolbar">
             <div class="table-search">
                 <span class="table-search-icon">🔍</span>
-                <input type="text" class="table-search-input" placeholder="Cari siswa atau kelas...">
+                <input type="text" id="sessionSearch" class="table-search-input" placeholder="Cari sesi...">
             </div>
         </div>
 
-        <table class="enterprise-table">
+        <table class="enterprise-table" id="sessionsTable">
             <thead>
                 <tr>
-                    <th>No</th>
+                    <th style="width: 60px;">No</th>
                     <th>Tanggal</th>
                     <th>Kelas</th>
-                    <th>Mapel</th>
-                    <th>NIS</th>
-                    <th>Nama Siswa</th>
-                    <th>Status</th>
-                    <th>Catatan</th>
+                    <th>Mata Pelajaran</th>
+                    <th style="width: 120px;">Jam Ke</th>
+                    <th style="width: 120px;">Jumlah Siswa</th>
+                    <th style="width: 150px;">Aksi</th>
                 </tr>
             </thead>
             <tbody>
-                <?php if (!empty($records)): ?>
-                    <?php foreach ($records as $index => $record): ?>
+                <?php if (!empty($sessions)): ?>
+                    <?php $no = 1; ?>
+                    <?php foreach ($sessions as $session): ?>
                         <tr>
-                            <td><?= $index + 1 ?></td>
-                            <td><?= date('d M Y', strtotime($record['date'])) ?></td>
-                            <td><span class="enterprise-badge badge-info"><?= esc($record['class_name']) ?></span></td>
-                            <td><?= esc($record['subject_name']) ?></td>
-                            <td><code style="font-weight: 600;"><?= esc($record['nis']) ?></code></td>
-                            <td><?= esc($record['student_name']) ?></td>
+                            <td><strong><?= $no++ ?></strong></td>
                             <td>
-                                <?php
-                                $statusMap = [
-                                    'H' => ['✓ Hadir', 'badge-success'],
-                                    'I' => ['📋 Izin', 'badge-info'],
-                                    'S' => ['🏥 Sakit', 'badge-warning'],
-                                    'A' => ['❌ Alpa', 'badge-error'],
-                                    'T' => ['⏰ Terlambat', 'badge-warning']
-                                ];
-                                $status = $statusMap[$record['status']] ?? ['?', 'badge-neutral'];
-                                ?>
-                                <span class="enterprise-badge <?= $status[1] ?>"><?= $status[0] ?></span>
+                                <div style="display: flex; flex-direction: column;">
+                                    <span style="font-weight: 600;">
+                                        <?= date('d M Y', strtotime($session['date'])) ?>
+                                    </span>
+                                    <span style="font-size: 0.75rem; color: var(--enterprise-text-tertiary);">
+                                        <?= date('l', strtotime($session['date'])) ?>
+                                    </span>
+                                </div>
                             </td>
-                            <td><?= esc($record['note'] ?? '-') ?></td>
+                            <td>
+                                <span class="enterprise-badge badge-info">
+                                    <?= esc($session['class_name']) ?>
+                                </span>
+                            </td>
+                            <td><?= esc($session['subject_name']) ?></td>
+                            <td>
+                                <span class="enterprise-badge badge-neutral">
+                                    Jam <?= esc($session['lesson_hour']) ?>
+                                </span>
+                            </td>
+                            <td>
+                                <span class="enterprise-badge badge-success">
+                                    <?= $session['count'] ?> siswa
+                                </span>
+                            </td>
+                            <td>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <a href="<?= base_url('/attendance/edit/' . $session['id']) ?>"
+                                       class="btn-enterprise btn-secondary btn-sm"
+                                       title="Edit Absensi">
+                                        <span>✏️</span>
+                                        <span>Edit</span>
+                                    </a>
+                                </div>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                 <?php else: ?>
                     <tr>
-                        <td colspan="8" class="text-center" style="padding: 3rem;">
+                        <td colspan="7" class="text-center" style="padding: 3rem;">
                             <div class="empty-state" style="padding: 1rem;">
                                 <div class="empty-state-icon">📊</div>
                                 <h3 class="empty-state-title">Belum Ada Data</h3>
-                                <p class="empty-state-message">Belum ada data absensi untuk filter ini</p>
+                                <p class="empty-state-message">Belum ada sesi absensi untuk filter ini</p>
                             </div>
                         </td>
                     </tr>
@@ -193,5 +229,14 @@ function exportExcel() {
     // Open in new window for download
     window.location.href = exportUrl;
 }
+
+// Session search functionality
+document.getElementById('sessionSearch').addEventListener('input', function() {
+    const query = this.value.toLowerCase();
+    document.querySelectorAll('#sessionsTable tbody tr').forEach(row => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(query) ? '' : 'none';
+    });
+});
 </script>
 <?= $this->endSection() ?>
