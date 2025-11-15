@@ -69,7 +69,7 @@
             <span class="enterprise-badge badge-warning">Keamanan</span>
         </div>
 
-        <form action="<?= base_url('/user/change-password') ?>" method="POST">
+        <form action="<?= base_url('/user/password/update') ?>" method="POST">
             <?= csrf_field() ?>
 
             <div style="display: flex; flex-direction: column; gap: 1.5rem;">

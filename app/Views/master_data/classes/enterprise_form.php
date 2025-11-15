@@ -27,6 +27,17 @@
     <form action="<?= isset($class) ? base_url('/master/classes/update/' . $class['id']) : base_url('/master/classes/store') ?>" method="POST">
         <?= csrf_field() ?>
 
+        <?php if (session()->has('errors')): ?>
+            <div class="enterprise-alert alert-error mb-4">
+                <div style="font-weight: 600; margin-bottom: 0.5rem;">⚠️ Terdapat kesalahan:</div>
+                <ul style="margin: 0; padding-left: 1.5rem;">
+                    <?php foreach (session('errors') as $error): ?>
+                        <li><?= esc($error) ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        <?php endif; ?>
+
         <div style="display: flex; flex-direction: column; gap: 1.5rem;">
             <!-- Nama Kelas -->
             <div class="enterprise-form-group">
