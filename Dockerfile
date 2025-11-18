@@ -12,16 +12,22 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     libxml2-dev \
     libzip-dev \
+    libicu-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
     zip \
     unzip \
     nginx \
     supervisor
 
-# Clear cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+# Configure GD with freetype and jpeg support
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg
 
 # Install PHP extensions
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip intl
+
+# Clear cache
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
