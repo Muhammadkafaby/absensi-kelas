@@ -1,0 +1,58 @@
+# Git files
+.git
+.gitignore
+.gitattributes
+
+# Docker files
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Documentation
+README.md
+DOCKER.md
+*.md
+
+# Environment files
+.env
+.env.*
+
+# Node modules
+node_modules
+npm-debug.log
+
+# Composer
+vendor
+
+# IDE files
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Temporary files
+writable/cache/*
+writable/logs/*
+writable/session/*
+writable/uploads/*
+!writable/cache/.gitkeep
+!writable/logs/.gitkeep
+!writable/session/.gitkeep
+!writable/uploads/.gitkeep
+
+# Testing
+tests
+phpunit.xml
+.phpunit.result.cache
+
+# CI/CD
+.github
+.gitlab-ci.yml
