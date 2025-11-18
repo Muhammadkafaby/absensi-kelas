@@ -1,0 +1,69 @@
+version: '3.8'
+
+services:
+  # PHP-FPM with Nginx
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: absensi_app
+    restart: unless-stopped
+    working_dir: /var/www/html
+    volumes:
+      - ./:/var/www/html
+      - ./docker/php/php.ini:/usr/local/etc/php/conf.d/custom.ini
+    networks:
+      - absensi_network
+    depends_on:
+      - db
+    ports:
+      - "8080:80"
+    environment:
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_DATABASE=${DB_DATABASE:-absensi_kelas}
+      - DB_USERNAME=${DB_USERNAME:-root}
+      - DB_PASSWORD=${DB_PASSWORD:-secret}
+
+  # MySQL Database
+  db:
+    image: mysql:8.0
+    container_name: absensi_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-secret}
+      MYSQL_DATABASE: ${DB_DATABASE:-absensi_kelas}
+      MYSQL_USER: ${DB_USERNAME:-absensi_user}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-secret}
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./docker/mysql/init:/docker-entrypoint-initdb.d
+    networks:
+      - absensi_network
+    ports:
+      - "3306:3306"
+    command: --default-authentication-plugin=mysql_native_password
+
+  # PhpMyAdmin (Optional - for database management)
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: absensi_phpmyadmin
+    restart: unless-stopped
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-secret}
+    networks:
+      - absensi_network
+    ports:
+      - "8081:80"
+    depends_on:
+      - db
+
+networks:
+  absensi_network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+    driver: local
